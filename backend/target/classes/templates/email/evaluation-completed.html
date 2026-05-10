@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>Evaluation completed — Arabic Quality Platform</title>
+  <style>
+    body{margin:0;font-family:Cairo,Arial,sans-serif;background:#f4f6fb;color:#0f172a}
+    .wrap{max-width:600px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;
+          box-shadow:0 6px 24px rgba(15,23,42,.06)}
+    .head{background:linear-gradient(135deg,#047857 0%,#1e3a8a 100%);color:#fff;padding:28px 32px}
+    .h1{font-size:22px;margin:0 0 6px;font-weight:700}
+    .h2{font-size:13px;opacity:.85;margin:0}
+    .body{padding:28px 32px}
+    .lead{font-size:15px;line-height:1.7;color:#334155}
+    .grade{margin:24px 0;padding:24px;border-radius:14px;text-align:center;
+           background:linear-gradient(135deg,#ecfdf5,#eff6ff);border:1px solid #a7f3d0}
+    .grade .pct{font-size:42px;font-weight:800;color:#047857;margin:0}
+    .grade .lab{font-size:18px;font-weight:600;color:#1e3a8a;margin-top:6px}
+    .cta{display:inline-block;margin-top:14px;padding:12px 22px;border-radius:10px;
+         background:linear-gradient(135deg,#059669 0%,#047857 100%);color:#fff !important;
+         text-decoration:none;font-weight:600}
+    .foot{padding:18px 32px;font-size:12px;color:#64748b;border-top:1px solid #e2e8f0}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="h1">تم اعتماد التقييم النهائي</div>
+    <div class="h2">Final evaluation completed</div>
+  </div>
+  <div class="body">
+    <p class="lead">
+      مرحبًا <strong th:text="${managerName}">المدير</strong>،<br>
+      تم إكمال جميع مراحل التقييم لطلبكم
+      <strong th:text="'#' + ${requestNumber}">#REQ</strong>.
+    </p>
+
+    <div class="grade">
+      <p class="pct" th:text="${percentage} + '%'">85%</p>
+      <p class="lab" th:text="${grade}">Excellent</p>
+    </div>
+
+    <a th:href="${reportUrl}" class="cta">تحميل التقرير الرسمي · Download official report</a>
+
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0">
+
+    <p class="lead" style="direction:ltr;text-align:left;font-family:Inter,Arial,sans-serif">
+      Hello <strong th:text="${managerName}">manager</strong>,<br>
+      All evaluation stages for request <strong th:text="'#' + ${requestNumber}">#REQ</strong>
+      have been completed. The official PDF report is available for download.
+    </p>
+  </div>
+  <div class="foot">
+    <span th:text="${platformName}">Arabic Quality Platform</span>
+  </div>
+</div>
+</body>
+</html>

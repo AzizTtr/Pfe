@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome — Arabic Quality Platform</title>
+  <style>
+    body{margin:0;font-family:Cairo,Arial,sans-serif;background:#f4f6fb;color:#0f172a}
+    .wrap{max-width:600px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;
+          box-shadow:0 6px 24px rgba(15,23,42,.06)}
+    .head{background:linear-gradient(135deg,#047857 0%,#1e3a8a 100%);color:#fff;padding:28px 32px}
+    .h1{font-size:22px;margin:0 0 6px;font-weight:700}
+    .h2{font-size:13px;opacity:.85;margin:0;letter-spacing:.04em}
+    .body{padding:28px 32px}
+    .lead{font-size:15px;line-height:1.7;color:#334155}
+    .cta{display:inline-block;margin:20px 0 6px;padding:12px 22px;border-radius:10px;
+         background:linear-gradient(135deg,#059669 0%,#047857 100%);color:#fff !important;
+         text-decoration:none;font-weight:600}
+    .note{margin-top:18px;padding:14px 16px;border-inline-start:3px solid #10b981;
+          background:#ecfdf5;color:#065f46;font-size:14px;border-radius:8px}
+    .foot{padding:18px 32px;font-size:12px;color:#64748b;border-top:1px solid #e2e8f0}
+    .ltr{direction:ltr;text-align:left;font-family:Inter,Arial,sans-serif}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="h1" th:text="${platformName}">Arabic Quality Platform</div>
+    <div class="h2">مرحبًا بكم · Welcome aboard</div>
+  </div>
+  <div class="body">
+    <p class="lead">
+      مرحبًا <strong th:text="${managerName}">المدير</strong>،<br>
+      تمت الموافقة على تسجيل مؤسستكم
+      <strong th:text="${entityName}">اسم الجهة</strong>
+      في منصة مقياس جودة تعليم اللغة العربية.
+    </p>
+
+    <p class="lead">
+      ستصلكم رسالة منفصلة من نظام Keycloak تتضمن رابط تعيين كلمة المرور.
+      بعد إعداد كلمة المرور، يمكنكم تسجيل الدخول إلى المنصة وبدء تقديم طلبات التقييم.
+    </p>
+
+    <div th:if="${welcomeNote}" class="note" th:text="${welcomeNote}"></div>
+
+    <a th:href="${loginUrl}" class="cta">الانتقال إلى المنصة · Open the platform</a>
+
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0">
+
+    <div class="ltr">
+      <p class="lead">
+        Hello <strong th:text="${managerName}">manager</strong>,<br>
+        Your registration for <strong th:text="${entityName}">entity</strong> has been approved.
+        You will receive a separate email from Keycloak with a link to set up your password.
+        Once that is done, sign in to the platform and start submitting evaluation requests.
+      </p>
+    </div>
+  </div>
+  <div class="foot">
+    <span th:text="${platformName}">Arabic Quality Platform</span> ·
+    رسالة آلية، يرجى عدم الرد عليها · Automated message, please do not reply.
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Arabic Quality Platform — Premium Design Preview</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Cairo', 'Inter', 'system-ui', 'sans-serif'],
+        },
+        colors: {
+          forest: {
+            50:'#ecfdf5',100:'#d1fae5',300:'#6ee7b7',500:'#10b981',
+            600:'#059669',700:'#047857',800:'#065f46',900:'#064e3b',950:'#022c22'
+          },
+          royal: {
+            500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a',950:'#172554'
+          }
+        }
+      }
+    }
+  }
+</script>
+
+<!-- Module imports -->
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "framer-motion": "https://esm.sh/framer-motion@11.3.19?deps=react@18.3.1,react-dom@18.3.1",
+    "three": "https://esm.sh/three@0.165.0"
+  }
+}
+</script>
+
+<style>
+  html, body { background: #020617; color: white; }
+  body { font-family: 'Cairo', 'Inter', sans-serif; overflow-x: hidden; }
+
+  /* Aurora background */
+  .aurora {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(60% 50% at 20% 0%,  rgba(16,185,129,0.18), transparent 60%),
+      radial-gradient(50% 50% at 90% 20%, rgba(30,58,138,0.30), transparent 60%),
+      radial-gradient(50% 60% at 70% 90%, rgba(59,130,246,0.18), transparent 60%),
+      radial-gradient(40% 50% at 10% 80%, rgba(6,78,59,0.28),   transparent 60%);
+  }
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .25;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse at center, black, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black, transparent 70%);
+  }
+
+  /* Glassmorphism */
+  .glass {
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .glass-strong {
+    background: rgba(2, 6, 23, 0.65);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #10b981 0%, #6ee7b7 30%, #60a5fa 70%, #3b82f6 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  .glow-emerald { box-shadow: 0 0 0 0 rgba(16,185,129,0); transition: box-shadow .35s ease, transform .35s ease; }
+  .glow-emerald:hover { box-shadow: 0 0 40px rgba(16,185,129,.45), 0 0 80px rgba(16,185,129,.18); transform: translateY(-2px); }
+
+  /* Card border-gradient on hover */
+  .card-rim { position: relative; }
+  .card-rim::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+    background: linear-gradient(135deg, rgba(16,185,129,0.6), rgba(59,130,246,0.6));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    opacity: 0; transition: opacity .35s ease; pointer-events: none;
+  }
+  .card-rim:hover::after { opacity: 1; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #020617; }
+  ::-webkit-scrollbar-thumb { background: #1e3a8a; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2563eb; }
+
+  /* Three.js canvas */
+  #hero-canvas { width: 100%; height: 100%; display: block; }
+
+  /* RTL helpers */
+  [dir="rtl"] .icon-mirror { transform: scaleX(-1); }
+
+  /* Subtle pulse for badge */
+  @keyframes pulse-soft { 0%,100% { opacity: 1 } 50% { opacity: .7 } }
+  .pulse-soft { animation: pulse-soft 2.4s ease-in-out infinite; }
+
+  /* Marquee dot */
+  .live-dot::before {
+    content:''; display:inline-block; width:8px; height:8px; border-radius:50%;
+    background:#10b981; box-shadow:0 0 12px #10b981; margin-inline-end:8px;
+  }
+</style>
+</head>
+
+<body>
+<div class="aurora"></div>
+<div class="grid-bg"></div>
+<div id="root" class="relative z-10"></div>
+
+<script type="module">
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { createRoot } from 'react-dom/client';
+import { motion, AnimatePresence } from 'framer-motion';
+import * as THREE from 'three';
+
+/* ─────────────────────────────────────────────
+   i18n
+───────────────────────────────────────────── */
+const translations = {
+  ar: {
+    title: 'مقياس جودة تعليم اللغة العربية',
+    title2: 'لغير الناطقين بها',
+    subtitle: 'منصة شاملة تدير الدورة الكاملة للتقييم — من تسجيل الجهات التعليمية حتى إصدار التقرير الرسمي بثقة وشفافية.',
+    cta: 'ابدأ الآن', secondaryCta: 'استكشف الميزات',
+    badge: 'منصة معتمدة', live: 'النظام نشط',
+    sectionTitle: 'الوصول السريع', secondaryTitle: 'مكونات النظام',
+    nav: {
+      home: 'الرئيسية', design: 'المرشد التصميمي',
+      samples: 'نماذج التقييم', controls: 'كل الأدوات',
+      status: 'الحالة', settings: 'الإعدادات'
+    },
+    cards: [
+      { key:'getStarted', icon:'sparkles', t:'البداية',          d:'دليل سريع لاستخدام المنصة',         badge:'جديد' },
+      { key:'entities',   icon:'school',   t:'الجهات التعليمية', d:'تسجيل ومتابعة المؤسسات الراغبة',     badge:null   },
+      { key:'evaluation', icon:'users',    t:'فريق التقييم',     d:'مراجعة وتقييم الطلبات وفق معايير الجودة', badge:null },
+      { key:'approvals',  icon:'shield',   t:'الموافقات',        d:'إدارية ثم ميدانية ثم نهائية',         badge:null   },
+      { key:'admin',      icon:'chart',    t:'لوحة الإدارة',     d:'فئات، أسئلة، تقارير، وتدقيق شامل',    badge:null   },
+    ],
+    secondary: [
+      { icon:'grid',    t:'الإدخال الأساسي', d:'نماذج، حقول، رفع ملفات' },
+      { icon:'layers',  t:'المجموعات',       d:'فئات، أسئلة، قيم التقييم' },
+      { icon:'globe',   t:'التنقل',          d:'لوحات تحكم وتدفقات العمل' },
+      { icon:'bell',    t:'الحالة والمعلومات', d:'إشعارات، سجل تدقيق، شارات' },
+    ],
+    stats: [
+      { v: '22',  l: 'ميزة كاملة' },
+      { v: '5',   l: 'أدوار وصلاحيات' },
+      { v: 'AR/EN', l: 'لغتان مدعومتان' },
+      { v: '100%', l: 'تدقيق شامل' },
+    ]
+  },
+  en: {
+    title: 'Arabic Quality Platform',
+    title2: 'for Non-Native Speakers',
+    subtitle: 'A comprehensive platform that automates the full evaluation cycle — from institution registration to the issuance of an official report, with confidence and transparency.',
+    cta: 'Get Started', secondaryCta: 'Explore Features',
+    badge: 'Officially Certified', live: 'System Live',
+    sectionTitle: 'Quick Access', secondaryTitle: 'System Components',
+    nav: {
+      home: 'Home', design: 'Design Guidance',
+      samples: 'Evaluation Samples', controls: 'All Controls',
+      status: 'Status', settings: 'Settings'
+    },
+    cards: [
+      { key:'getStarted', icon:'sparkles', t:'Getting Started',     d:'Quick guide to using the platform',        badge:'New' },
+      { key:'entities',   icon:'school',   t:'Educational Entities', d:'Register and track institutions',           badge:null },
+      { key:'evaluation', icon:'users',    t:'Evaluation Team',      d:'Review and grade submissions',              badge:null },
+      { key:'approvals',  icon:'shield',   t:'Approvals',            d:'Administrative → Field → Final',            badge:null },
+      { key:'admin',      icon:'chart',    t:'Admin Panel',          d:'Categories, questions, reports, audit',     badge:null },
+    ],
+    secondary: [
+      { icon:'grid',    t:'Basic Input',     d:'Forms, fields, file upload' },
+      { icon:'layers',  t:'Collections',     d:'Categories, questions, values' },
+      { icon:'globe',   t:'Navigation',      d:'Dashboards & workflows' },
+      { icon:'bell',    t:'Status & Info',   d:'Notifications, audit log, badges' },
+    ],
+    stats: [
+      { v: '22',  l: 'Features' },
+      { v: '5',   l: 'Roles' },
+      { v: 'AR/EN', l: 'Languages' },
+      { v: '100%', l: 'Auditable' },
+    ]
+  }
+};
+
+/* ─────────────────────────────────────────────
+   Icon (inline SVG)
+───────────────────────────────────────────── */
+const Icon = ({ name, className = 'w-5 h-5' }) => {
+  const map = {
+    home:     <path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3v-7h6v7h3a1 1 0 001-1V10"/>,
+    design:   <path d="M11 4l9 4-9 4-9-4 9-4zM2 8v9l9 4 9-4V8M11 12v8"/>,
+    samples:  <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 12h6M9 16h6"/>,
+    controls: <path d="M4 6h16M4 12h16M4 18h12"/>,
+    status:   <path d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>,
+    settings: <path d="M10.3 4.3c.4-1.7 2.9-1.7 3.4 0a1.7 1.7 0 002.5 1.1c1.6-1 3.4.8 2.4 2.4a1.7 1.7 0 001.1 2.5c1.7.4 1.7 2.9 0 3.4a1.7 1.7 0 00-1 2.5c.9 1.6-.9 3.3-2.4 2.4a1.7 1.7 0 00-2.6 1.1c-.4 1.7-2.9 1.7-3.4 0a1.7 1.7 0 00-2.5-1.1c-1.5 1-3.3-.8-2.4-2.4a1.7 1.7 0 00-1-2.5c-1.7-.4-1.7-2.9 0-3.4a1.7 1.7 0 001-2.5c-.9-1.5.9-3.3 2.4-2.4 1 .6 2.3.1 2.6-1zM15 12a3 3 0 11-6 0 3 3 0 016 0z"/>,
+    sparkles: <path d="M5 3v4M3 5h4M6 17v4M4 19h4M13 3l3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7z"/>,
+    arrow:    <path d="M14 5l7 7m0 0l-7 7m7-7H3"/>,
+    school:   <path d="M12 14l9-5-9-5-9 5 9 5zM12 14l6.16-3.42a12 12 0 01.66 6.48A12 12 0 0012 20a12 12 0 00-6.82-3 12 12 0 01.66-6.48L12 14zM12 14v7"/>,
+    users:    <path d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a3 3 0 015.36-1.86M13 7a4 4 0 11-8 0 4 4 0 018 0zM21 13a4 4 0 11-8 0 4 4 0 018 0z"/>,
+    shield:   <path d="M9 12l2 2 4-4m5.62-4A11.96 11.96 0 0112 2.94 11.96 11.96 0 013.38 6 12 12 0 003 9c0 5.6 3.82 10.3 9 11.62C17.18 19.3 21 14.6 21 9c0-1-.13-2.05-.38-3z"/>,
+    grid:     <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>,
+    layers:   <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>,
+    bell:     <path d="M15 17h5l-1.4-1.4A2 2 0 0118 14.16V11a6 6 0 00-4-5.66V5a2 2 0 10-4 0v.34A6 6 0 006 11v3.16c0 .54-.21 1.05-.6 1.44L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>,
+    globe:    <path d="M3 11h2a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v3M8 4v1.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1M15 20.5V18a2 2 0 012-2h3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>,
+    chart:    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>,
+    sun:      <path d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.36-6.36l-1.42 1.42M7.05 16.95l-1.4 1.4m12.72 0l-1.42-1.4M7.05 7.05L5.64 5.64M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>,
+    moon:     <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>,
+    languages:<path d="M3 5h12M9 3v2m1.05 12L6 21M21 21l-4-9-4 9M9 7h6a4 4 0 010 8h-4M5 9c0 1.5 2 4 5 6"/>,
+    menu:     <path d="M4 6h16M4 12h16M4 18h16"/>,
+  };
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+         stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+         strokeLinejoin="round" className={className}>
+      {map[name]}
+    </svg>
+  );
+};
+
+/* ─────────────────────────────────────────────
+   3D Hero — floating crystal with mouse parallax
+───────────────────────────────────────────── */
+function Hero3D() {
+  const mountRef = useRef(null);
+  const mouse = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
+
+  useEffect(() => {
+    const mount = mountRef.current;
+    const w = mount.clientWidth, h = mount.clientHeight;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, w/h, 0.1, 100);
+    camera.position.z = 5.2;
+
+    const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(w, h);
+    mount.appendChild(renderer.domElement);
+
+    // Lights
+    const amb = new THREE.AmbientLight(0xffffff, 0.4);
+    const dir = new THREE.DirectionalLight(0x10b981, 1.2); dir.position.set(3, 4, 5);
+    const dir2= new THREE.DirectionalLight(0x3b82f6, 1.0); dir2.position.set(-4, -2, 3);
+    const dir3= new THREE.PointLight(0x6ee7b7, 1.5, 12);   dir3.position.set(0, 2, 3);
+    scene.add(amb, dir, dir2, dir3);
+
+    // Crystal — icosahedron with subtle distortion via vertex shader
+    const geo = new THREE.IcosahedronGeometry(1.7, 4);
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: 0x0e3a3b,
+      metalness: 0.2,
+      roughness: 0.05,
+      transmission: 0.95,
+      thickness: 1.5,
+      ior: 1.45,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.08,
+      iridescence: 0.6,
+      iridescenceIOR: 1.3,
+      transparent: true,
+      opacity: 0.92,
+    });
+    const crystal = new THREE.Mesh(geo, mat);
+    scene.add(crystal);
+
+    // Wireframe overlay for definition
+    const wire = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(1.72, 1),
+      new THREE.MeshBasicMaterial({ color: 0x6ee7b7, wireframe: true, transparent: true, opacity: 0.18 })
+    );
+    scene.add(wire);
+
+    // Particles around
+    const particles = new THREE.BufferGeometry();
+    const N = 220, positions = new Float32Array(N*3);
+    for (let i=0;i<N;i++){
+      const r = 3 + Math.random()*1.8, t = Math.random()*Math.PI*2, p = Math.acos(2*Math.random()-1);
+      positions[i*3]   = r*Math.sin(p)*Math.cos(t);
+      positions[i*3+1] = r*Math.sin(p)*Math.sin(t);
+      positions[i*3+2] = r*Math.cos(p);
+    }
+    particles.setAttribute('position', new THREE.BufferAttribute(positions,3));
+    const pmat = new THREE.PointsMaterial({ color:0x60a5fa, size:0.025, transparent:true, opacity:0.7 });
+    const pts = new THREE.Points(particles, pmat);
+    scene.add(pts);
+
+    // Mouse
+    const onMove = (e)=>{
+      const r = mount.getBoundingClientRect();
+      mouse.current.tx = ((e.clientX - r.left) / r.width  - 0.5) * 2;
+      mouse.current.ty = ((e.clientY - r.top)  / r.height - 0.5) * 2;
+    };
+    window.addEventListener('mousemove', onMove);
+
+    // Animate
+    let raf, t0 = performance.now();
+    const tick = () => {
+      const t = (performance.now() - t0) / 1000;
+      mouse.current.x += (mouse.current.tx - mouse.current.x) * 0.05;
+      mouse.current.y += (mouse.current.ty - mouse.current.y) * 0.05;
+
+      crystal.rotation.x = t * 0.18 + mouse.current.y * 0.5;
+      crystal.rotation.y = t * 0.22 + mouse.current.x * 0.7;
+      crystal.position.y = Math.sin(t * 0.8) * 0.12;
+
+      wire.rotation.copy(crystal.rotation);
+      wire.position.copy(crystal.position);
+
+      pts.rotation.y = t * 0.05;
+      pts.rotation.x = t * 0.03;
+
+      renderer.render(scene, camera);
+      raf = requestAnimationFrame(tick);
+    };
+    tick();
+
+    // Resize
+    const onResize = () => {
+      const W = mount.clientWidth, H = mount.clientHeight;
+      camera.aspect = W/H; camera.updateProjectionMatrix();
+      renderer.setSize(W, H);
+    };
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('resize', onResize);
+      renderer.dispose(); geo.dispose(); mat.dispose();
+      mount.removeChild(renderer.domElement);
+    };
+  }, []);
+
+  return <div ref={mountRef} id="hero-canvas" className="w-full h-full" />;
+}
+
+/* ─────────────────────────────────────────────
+   Sidebar
+───────────────────────────────────────────── */
+function Sidebar({ lang, onLang, dark, onDark }) {
+  const T = translations[lang];
+  const items = [
+    { id:'home',    icon:'home',    label: T.nav.home,    active:true },
+    { id:'design',  icon:'design',  label: T.nav.design   },
+    { id:'samples', icon:'samples', label: T.nav.samples  },
+    { id:'controls',icon:'controls',label: T.nav.controls },
+    { id:'status',  icon:'status',  label: T.nav.status   },
+  ];
+
+  return (
+    <motion.aside
+      initial={{ x: lang === 'ar' ? 80 : -80, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.22,1,0.36,1] }}
+      className="glass-strong fixed top-4 bottom-4 w-64 rounded-3xl flex flex-col z-30
+                 ltr:left-4 rtl:right-4">
+      {/* Logo */}
+      <div className="px-5 pt-6 pb-5 flex items-center gap-3 border-b border-white/5">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-forest-500 to-royal-700
+                        flex items-center justify-center shadow-lg shadow-forest-500/20">
+          <Icon name="sparkles" className="w-5 h-5 text-white" />
+        </div>
+        <div className="leading-tight">
+          <div className="text-sm font-bold tracking-wide">Arabic Quality</div>
+          <div className="text-[10px] uppercase tracking-[0.2em] text-white/50">Platform</div>
+        </div>
+      </div>
+
+      {/* Live status pill */}
+      <div className="px-5 pt-4">
+        <div className="glass rounded-xl px-3 py-2 flex items-center justify-between text-[11px]">
+          <span className="live-dot pulse-soft text-white/80">{T.live}</span>
+          <span className="text-white/50">v0.1</span>
+        </div>
+      </div>
+
+      {/* Nav */}
+      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        {items.map((it, i) => (
+          <motion.button
+            key={it.id}
+            initial={{ opacity: 0, x: lang === 'ar' ? 10 : -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.15 + i * 0.05 }}
+            className={`group w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
+                       transition-all relative ${
+              it.active
+                ? 'bg-gradient-to-r from-forest-700/40 to-royal-800/40 text-white border border-white/10'
+                : 'text-white/60 hover:text-white hover:bg-white/5'
+            }`}>
+            {it.active && (
+              <span className="absolute ltr:left-0 rtl:right-0 top-1/2 -translate-y-1/2 w-1 h-6
+                               rounded-full bg-gradient-to-b from-forest-500 to-royal-500" />
+            )}
+            <Icon name={it.icon} className="w-5 h-5 shrink-0" />
+            <span className="text-sm font-medium">{it.label}</span>
+            {it.active && (
+              <span className="ms-auto w-1.5 h-1.5 rounded-full bg-forest-500 shadow-[0_0_10px_#10b981]" />
+            )}
+          </motion.button>
+        ))}
+      </nav>
+
+      {/* Toolbar */}
+      <div className="px-3 pb-3 space-y-1 border-t border-white/5 pt-3">
+        <button onClick={() => onLang(lang === 'ar' ? 'en' : 'ar')}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/70
+                     hover:text-white hover:bg-white/5 transition-all">
+          <Icon name="languages" className="w-5 h-5" />
+          <span className="text-sm font-medium">{lang === 'ar' ? 'English' : 'العربية'}</span>
+          <span className="ms-auto text-[10px] uppercase tracking-wider text-white/40">{lang}</span>
+        </button>
+        <button onClick={onDark}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/70
+                     hover:text-white hover:bg-white/5 transition-all">
+          <Icon name={dark ? 'sun' : 'moon'} className="w-5 h-5" />
+          <span className="text-sm font-medium">{dark ? (lang==='ar'?'فاتح':'Light') : (lang==='ar'?'داكن':'Dark')}</span>
+        </button>
+        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/70
+                          hover:text-white hover:bg-white/5 transition-all">
+          <Icon name="settings" className="w-5 h-5" />
+          <span className="text-sm font-medium">{T.nav.settings}</span>
+        </button>
+      </div>
+    </motion.aside>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   Hero
+───────────────────────────────────────────── */
+function Hero({ lang }) {
+  const T = translations[lang];
+  return (
+    <section className="relative grid lg:grid-cols-[1.1fr_1fr] gap-8 items-center mb-16">
+      {/* Text */}
+      <div>
+        <motion.div
+          initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }}
+          transition={{ duration: 0.6 }}
+          className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6 text-xs">
+          <Icon name="shield" className="w-3.5 h-3.5 text-forest-300" />
+          <span className="text-white/80">{T.badge}</span>
+          <span className="text-white/40">·</span>
+          <span className="text-forest-300">{T.live}</span>
+        </motion.div>
+
+        <motion.h1
+          initial={{ opacity:0, y:30 }} animate={{ opacity:1, y:0 }}
+          transition={{ duration: 0.7, delay: 0.05 }}
+          className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight mb-2">
+          <span className="gradient-text">{T.title}</span>
+        </motion.h1>
+        <motion.h2
+          initial={{ opacity:0, y:30 }} animate={{ opacity:1, y:0 }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="text-2xl md:text-3xl font-semibold text-white/85 mb-6">
+          {T.title2}
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }}
+          transition={{ duration: 0.7, delay: 0.25 }}
+          className="text-base md:text-lg text-white/65 max-w-xl mb-8 leading-relaxed">
+          {T.subtitle}
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }}
+          transition={{ duration: 0.7, delay: 0.35 }}
+          className="flex flex-wrap gap-3">
+          <button className="glow-emerald inline-flex items-center gap-2 px-6 py-3 rounded-xl
+                             bg-gradient-to-r from-forest-600 to-forest-700 text-white font-semibold
+                             border border-forest-500/40">
+            {T.cta}
+            <Icon name="arrow" className="w-4 h-4 icon-mirror" />
+          </button>
+          <button className="glass inline-flex items-center gap-2 px-6 py-3 rounded-xl
+                             text-white/85 hover:text-white hover:bg-white/10 font-medium transition">
+            {T.secondaryCta}
+          </button>
+        </motion.div>
+
+        {/* Stats */}
+        <motion.div
+          initial="hidden" animate="show"
+          variants={{ show: { transition: { staggerChildren: 0.08, delayChildren: 0.5 } } }}
+          className="grid grid-cols-4 gap-3 mt-10 max-w-xl">
+          {T.stats.map((s,i)=>(
+            <motion.div key={i}
+              variants={{ hidden:{opacity:0,y:14}, show:{opacity:1,y:0} }}
+              className="glass rounded-xl p-3 text-center">
+              <div className="text-lg md:text-xl font-bold gradient-text">{s.v}</div>
+              <div className="text-[10px] uppercase tracking-wider text-white/55 mt-1">{s.l}</div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* 3D */}
+      <motion.div
+        initial={{ opacity:0, scale:0.92 }} animate={{ opacity:1, scale:1 }}
+        transition={{ duration: 0.9, delay: 0.2 }}
+        className="relative aspect-square max-w-[520px] mx-auto w-full">
+        <div className="absolute inset-0 glass rounded-[2rem] overflow-hidden">
+          <Hero3D />
+          <div className="absolute inset-0 pointer-events-none rounded-[2rem]"
+               style={{ background:'radial-gradient(120% 80% at 50% 100%, rgba(16,185,129,0.15), transparent 60%)' }}/>
+        </div>
+        {/* Floating chips */}
+        <motion.div
+          animate={{ y: [0,-10,0] }} transition={{ duration: 4, repeat: Infinity, ease:'easeInOut' }}
+          className="absolute -top-3 ltr:-left-3 rtl:-right-3 glass rounded-2xl px-3 py-2 flex items-center gap-2 text-xs">
+          <Icon name="check" className="w-4 h-4 text-forest-300" />
+          <span className="text-white/85">A · B · C · D</span>
+        </motion.div>
+        <motion.div
+          animate={{ y: [0,8,0] }} transition={{ duration: 5, repeat: Infinity, ease:'easeInOut' }}
+          className="absolute -bottom-3 ltr:-right-3 rtl:-left-3 glass rounded-2xl px-3 py-2 flex items-center gap-2 text-xs">
+          <Icon name="chart" className="w-4 h-4 text-royal-500" />
+          <span className="text-white/85">PDF · Excel</span>
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   Cards Grid (primary)
+───────────────────────────────────────────── */
+function PrimaryGrid({ lang }) {
+  const T = translations[lang];
+  return (
+    <section className="mb-12">
+      <motion.div
+        initial={{ opacity:0, y:10 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }}
+        className="flex items-end justify-between mb-5">
+        <div>
+          <h3 className="text-2xl md:text-3xl font-bold">{T.sectionTitle}</h3>
+          <div className="h-1 w-14 mt-2 rounded-full bg-gradient-to-r from-forest-500 to-royal-500" />
+        </div>
+        <span className="text-xs text-white/50">5 / 22</span>
+      </motion.div>
+
+      <motion.div
+        initial="hidden" whileInView="show" viewport={{ once:true, margin:'-10%' }}
+        variants={{ show: { transition: { staggerChildren: 0.08 } } }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        {T.cards.map((c, i) => (
+          <motion.a key={c.key} href="#"
+            variants={{ hidden:{opacity:0,y:20}, show:{opacity:1,y:0} }}
+            whileHover={{ y: -6 }}
+            className="card-rim group glass rounded-2xl p-5 cursor-pointer transition-all
+                       hover:bg-slate-800/40 relative overflow-hidden">
+            {/* Gradient orb backdrop */}
+            <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full opacity-20 blur-3xl
+                            bg-gradient-to-br from-forest-500 to-royal-600 group-hover:opacity-40 transition-opacity" />
+            <div className="relative z-10">
+              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-forest-700 to-royal-800
+                              border border-white/10 flex items-center justify-center mb-4
+                              shadow-lg shadow-black/20">
+                <Icon name={c.icon} className="w-5 h-5 text-forest-300" />
+              </div>
+              {c.badge && (
+                <span className="absolute top-0 ltr:right-0 rtl:left-0 text-[10px] font-bold uppercase tracking-wider
+                                 px-2 py-1 rounded-full bg-forest-500/20 text-forest-300 border border-forest-500/30">
+                  {c.badge}
+                </span>
+              )}
+              <div className="text-base font-semibold mb-1">{c.t}</div>
+              <div className="text-sm text-white/55 leading-relaxed">{c.d}</div>
+              <div className="mt-4 flex items-center gap-1 text-xs text-forest-300/0 group-hover:text-forest-300 transition-colors">
+                <span>{lang === 'ar' ? 'استكشف' : 'Explore'}</span>
+                <Icon name="arrow" className="w-3 h-3 icon-mirror" />
+              </div>
+            </div>
+          </motion.a>
+        ))}
+      </motion.div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   Cards Grid (secondary)
+───────────────────────────────────────────── */
+function SecondaryGrid({ lang }) {
+  const T = translations[lang];
+  return (
+    <section className="mb-12">
+      <motion.div
+        initial={{ opacity:0, y:10 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }}
+        className="flex items-end justify-between mb-5">
+        <div>
+          <h3 className="text-2xl md:text-3xl font-bold">{T.secondaryTitle}</h3>
+          <div className="h-1 w-14 mt-2 rounded-full bg-gradient-to-r from-royal-500 to-forest-500" />
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial="hidden" whileInView="show" viewport={{ once:true, margin:'-10%' }}
+        variants={{ show: { transition: { staggerChildren: 0.08 } } }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {T.secondary.map((c, i) => (
+          <motion.a key={i} href="#"
+            variants={{ hidden:{opacity:0,y:20}, show:{opacity:1,y:0} }}
+            whileHover={{ y: -4 }}
+            className="card-rim group glass rounded-2xl p-5 cursor-pointer transition-all
+                       hover:bg-slate-800/40 flex items-start gap-4">
+            <div className="w-10 h-10 shrink-0 rounded-lg bg-gradient-to-br from-royal-800 to-forest-800
+                            border border-white/10 flex items-center justify-center">
+              <Icon name={c.icon} className="w-5 h-5 text-white/85" />
+            </div>
+            <div>
+              <div className="text-base font-semibold mb-1">{c.t}</div>
+              <div className="text-sm text-white/55 leading-relaxed">{c.d}</div>
+            </div>
+          </motion.a>
+        ))}
+      </motion.div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   Footer
+───────────────────────────────────────────── */
+function Footer({ lang }) {
+  return (
+    <footer className="mt-12 mb-2 text-xs text-white/40 flex flex-wrap items-center justify-between gap-2">
+      <div>© 2026 · Badr Zayani — PFE</div>
+      <div className="flex items-center gap-4">
+        <span className="hover:text-white/70 cursor-pointer transition">
+          {lang === 'ar' ? 'الخصوصية' : 'Privacy'}
+        </span>
+        <span className="hover:text-white/70 cursor-pointer transition">
+          {lang === 'ar' ? 'الشروط' : 'Terms'}
+        </span>
+        <span className="hover:text-white/70 cursor-pointer transition">API · v0.1</span>
+      </div>
+    </footer>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   App
+───────────────────────────────────────────── */
+function App() {
+  const [lang, setLang] = useState('ar');
+  const [dark, setDark] = useState(true);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.documentElement.dir  = lang === 'ar' ? 'rtl' : 'ltr';
+  }, [lang]);
+
+  return (
+    <div className="min-h-screen">
+      <Sidebar lang={lang} onLang={setLang} dark={dark} onDark={() => setDark(!dark)} />
+
+      {/* Main content with offset for sidebar */}
+      <main className="ltr:pl-72 rtl:pr-72 ltr:pr-6 rtl:pl-6 py-6 max-w-[1500px] mx-auto">
+        <Hero lang={lang} />
+        <PrimaryGrid lang={lang} />
+        <SecondaryGrid lang={lang} />
+        <Footer lang={lang} />
+      </main>
+    </div>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

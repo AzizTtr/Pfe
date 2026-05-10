@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>Additional info — Arabic Quality Platform</title>
+  <style>
+    body{margin:0;font-family:Cairo,Arial,sans-serif;background:#f4f6fb;color:#0f172a}
+    .wrap{max-width:600px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;
+          box-shadow:0 6px 24px rgba(15,23,42,.06)}
+    .head{background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);color:#fff;padding:28px 32px}
+    .h1{font-size:22px;margin:0 0 6px;font-weight:700}
+    .h2{font-size:13px;opacity:.85;margin:0}
+    .body{padding:28px 32px}
+    .lead{font-size:15px;line-height:1.7;color:#334155}
+    .msg{margin:18px 0;padding:16px;border-inline-start:3px solid #3b82f6;
+         background:#eff6ff;color:#1e3a8a;border-radius:8px}
+    .cta{display:inline-block;margin-top:14px;padding:12px 22px;border-radius:10px;
+         background:linear-gradient(135deg,#2563eb 0%,#1e40af 100%);color:#fff !important;
+         text-decoration:none;font-weight:600}
+    .foot{padding:18px 32px;font-size:12px;color:#64748b;border-top:1px solid #e2e8f0}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="h1">معلومات إضافية مطلوبة</div>
+    <div class="h2">Additional information requested</div>
+  </div>
+  <div class="body">
+    <p class="lead">
+      مرحبًا <strong th:text="${managerName}">المدير</strong>،<br>
+      يحتاج فريق التقييم إلى معلومات إضافية بشأن طلبكم
+      <strong th:text="'#' + ${requestNumber}">#REQ</strong>.
+    </p>
+    <div class="msg" th:text="${message}">message</div>
+    <a th:href="${reviewUrl}" class="cta">مراجعة الطلب · Review the request</a>
+
+    <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0">
+
+    <p class="lead" style="direction:ltr;text-align:left;font-family:Inter,Arial,sans-serif">
+      Hello <strong th:text="${managerName}">manager</strong>,<br>
+      The evaluation team needs additional information about request
+      <strong th:text="'#' + ${requestNumber}">#REQ</strong>. Please review and resubmit.
+    </p>
+  </div>
+  <div class="foot">
+    <span th:text="${platformName}">Arabic Quality Platform</span>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,109 @@
+{
+  "realm": "arabic-quality",
+  "displayName": "Arabic Quality Platform",
+  "displayNameHtml": "<strong>Arabic Quality</strong> Platform",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "permanentLockout": false,
+  "maxFailureWaitSeconds": 900,
+  "minimumQuickLoginWaitSeconds": 60,
+  "waitIncrementSeconds": 60,
+  "quickLoginCheckMilliSeconds": 1000,
+  "maxDeltaTimeSeconds": 43200,
+  "failureFactor": 5,
+
+  "passwordPolicy": "length(8) and digits(1) and upperCase(1) and specialChars(1) and notUsername and passwordHistory(3)",
+
+  "accessTokenLifespan": 900,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 28800,
+  "offlineSessionIdleTimeout": 2592000,
+
+  "smtpServer": {
+    "host": "aq-mailhog",
+    "port": "1025",
+    "from": "no-reply@arabic-quality.local",
+    "fromDisplayName": "Arabic Quality Platform",
+    "auth": "",
+    "ssl": "",
+    "starttls": "",
+    "envelopeFrom": "no-reply@arabic-quality.local"
+  },
+
+  "internationalizationEnabled": true,
+  "supportedLocales": ["ar", "en"],
+  "defaultLocale": "ar",
+
+  "roles": {
+    "realm": [
+      { "name": "ROLE_PLATFORM_ADMIN", "description": "Super administrateur de la plateforme" },
+      { "name": "ROLE_FIELD_REVIEWER", "description": "Approbation terrain" },
+      { "name": "ROLE_ADMIN_REVIEWER", "description": "Approbation administrative" },
+      { "name": "ROLE_EVALUATOR",      "description": "Membre de l'équipe d'évaluation" },
+      { "name": "ROLE_ENTITY_MANAGER", "description": "Représentant d'une institution" }
+    ]
+  },
+
+  "clients": [
+    {
+      "clientId": "frontend-spa",
+      "name": "Angular SPA",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "redirectUris": [
+        "http://localhost:4200/*",
+        "http://localhost:4200/silent-check-sso.html"
+      ],
+      "webOrigins": ["http://localhost:4200", "+"],
+      "rootUrl": "http://localhost:4200",
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:4200/*"
+      },
+      "fullScopeAllowed": true
+    },
+    {
+      "clientId": "backend-api",
+      "name": "Spring Boot Resource Server",
+      "enabled": true,
+      "bearerOnly": true,
+      "fullScopeAllowed": false
+    }
+  ],
+
+  "users": [
+    {
+      "username": "admin@arabic-quality.local",
+      "email": "admin@arabic-quality.local",
+      "firstName": "Platform",
+      "lastName": "Admin",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        { "type": "password", "value": "Admin@2026", "temporary": false }
+      ],
+      "realmRoles": ["ROLE_PLATFORM_ADMIN"]
+    },
+    {
+      "username": "evaluator@arabic-quality.local",
+      "email": "evaluator@arabic-quality.local",
+      "firstName": "Evaluator",
+      "lastName": "Demo",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        { "type": "password", "value": "Eval@2026", "temporary": false }
+      ],
+      "realmRoles": ["ROLE_EVALUATOR"]
+    }
+  ]
+}
