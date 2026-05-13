@@ -155,6 +155,56 @@
     }
   },
   "admin": {
+    "dashboard": {
+      "title": "Admin dashboard",
+      "subtitle": "Live overview of registration requests and platform actions",
+      "pending_title": "Pending registration requests",
+      "pending_subtitle": "Newest institutions waiting for your review",
+      "view_all": "View all",
+      "submitted": "Submitted",
+      "no_pending": "No pending registration requests",
+      "cards": {
+        "pending": "Waiting for review",
+        "approved": "Approved institutions",
+        "rejected": "Rejected requests"
+      }
+    },
+    "catalog": {
+      "add": "Add",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "saved": "Saved",
+      "empty": "No catalog items",
+      "code": "Code",
+      "name": "Name",
+      "name_ar": "Arabic name",
+      "name_en": "English name",
+      "description_ar": "Arabic description",
+      "description_en": "English description",
+      "order": "Order",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "deactivate": "Deactivate",
+      "reactivate": "Reactivate",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "required_docs": {
+      "short": "Required docs",
+      "title": "Required documents",
+      "add": "Add document",
+      "edit": "Edit document",
+      "label_en": "Label (EN)",
+      "label_ar": "Label (AR)",
+      "is_mandatory": "Mandatory for submission",
+      "mandatory": "Mandatory",
+      "optional": "Optional",
+      "empty": "No required documents configured for this category yet.",
+      "confirm_delete": "Delete this required document?",
+      "deleted": "Document deleted"
+    },
     "shell": {
       "title": "Admin Panel",
       "subtitle": "Full platform administration — users, categories, questions, reports"
@@ -207,6 +257,7 @@
     },
     "categories":  {
       "title": "Evaluation categories", "subtitle": "Organize the core evaluation categories",
+      "questions_count": "Questions",
       "it1": "CRUD for categories (add, edit, delete)",
       "it2": "Bilingual labels and descriptions (AR / EN)",
       "it3": "Manage required attachments per category",
@@ -214,6 +265,12 @@
     },
     "questions":   {
       "title": "Questions", "subtitle": "Bind questions to categories and manage them",
+      "all_categories": "All categories",
+      "total": "questions",
+      "question": "Question",
+      "attachment": "Requires attachment",
+      "text_ar": "Arabic question",
+      "text_en": "English question",
       "it1": "Create new questions and link to categories",
       "it2": "Toggle if answer requires an attachment",
       "it3": "Order questions inside each category",
@@ -221,6 +278,7 @@
     },
     "values":      {
       "title": "Values & scores", "subtitle": "A/B/C/D values and numeric scores",
+      "score": "Score",
       "it1": "Edit value labels (Fully compliant, Largely compliant, …)",
       "it2": "Tune numeric score for each value",
       "it3": "Set display order in forms",

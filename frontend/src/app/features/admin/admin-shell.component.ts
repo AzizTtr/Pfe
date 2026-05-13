@@ -48,7 +48,7 @@ interface AdminLink {
              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
              class="w-4 h-4" [innerHTML]="l.icon"></svg>
         <span>{{ l.labelKey | translate }}</span>
-        <span class="text-[10px] opacity-50 ms-1">F{{ l.feature }}</span>
+        <span *ngIf="l.feature !== '0'" class="text-[10px] opacity-50 ms-1">F{{ l.feature }}</span>
       </a>
     </nav>
 
@@ -58,6 +58,9 @@ interface AdminLink {
 })
 export class AdminShellComponent {
   links: AdminLink[] = [
+    { route: 'dashboard', labelKey: 'admin.dashboard.title',
+      icon: '<path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>',
+      feature: '0' },
     { route: 'registrations', labelKey: 'admin.registrations.title',
       icon: '<path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>',
       feature: '1' },

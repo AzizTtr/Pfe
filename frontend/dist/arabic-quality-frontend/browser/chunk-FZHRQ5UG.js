@@ -1,0 +1,1 @@
+var a={production:!1,apiBaseUrl:"http://localhost:8080/api",wsBaseUrl:"http://localhost:8080/api/ws",keycloak:{url:"http://localhost:8180",realm:"arabic-quality",clientId:"frontend-spa"},defaultLang:"ar",supportedLangs:["ar","en"]};export{a};

@@ -1,0 +1,1 @@
+import"./chunk-CWTPBX7D.js";var o=[{path:"",loadComponent:()=>import("./chunk-7RHNFKRL.js").then(t=>t.RequestsListComponent)},{path:"new",loadComponent:()=>import("./chunk-HFXOINZJ.js").then(t=>t.NewRequestComponent)},{path:":id",loadComponent:()=>import("./chunk-QMLVXL6Q.js").then(t=>t.RequestDetailComponent)}];export{o as entityPortalRoutes};

@@ -595,9 +595,9 @@ The `aqHeroCrystal` directive mounts a Three.js scene with:
 | 13 | Score | Calcul score final | ✅ | — | **Done** |
 | 14 | Notify | Envoi résultat | 🟡 | 🟡 | Sprint 6 |
 | 15 | Admin | Gestion users | ✅ | ✅ | **Done** |
-| 16 | Admin | Catégories | 🟡 | 🟡 | Sprint 3 |
-| 17 | Admin | Questions | 🟡 | 🟡 | Sprint 3 |
-| 18 | Admin | Valeurs A/B/C/D | 🟡 | 🟡 | Sprint 3 |
+| 16 | Admin | Catégories + Required Documents | ✅ | ✅ | **Done** |
+| 17 | Admin | Questions | ✅ | ✅ | **Done** |
+| 18 | Admin | Valeurs A/B/C/D | ✅ | ✅ | **Done** |
 | 19 | Admin | Distribution demandes | 🟡 | 🟡 | Sprint 5 |
 | 20 | Admin | Audit log | ✅ | 🟡 | AOP done, UI Sprint 7 |
 | 21 | Admin | Dashboard analytics | 🟡 | ✅ | Sprint 6 |
@@ -654,9 +654,16 @@ The `aqHeroCrystal` directive mounts a Three.js scene with:
 - Reset password trigger via email
 - **Features 1, 5 (partial), 15 end-to-end ✅**
 
-### 🔜 Sprint 3 — Catalog (M6)
+### ✅ Sprint 3 — Catalog (M6)
 
-CRUD for `evaluation_categories`, `questions`, `evaluation_values`, `category_required_documents`. Validation: cannot delete category referenced by submitted requests.
+- Full CRUD for `evaluation_categories` (8 endpoints with audit)
+- Full CRUD for `questions` (with category binding + active/inactive toggle)
+- Full CRUD for `evaluation_values` (A/B/C/D + numeric score + display order)
+- **Required documents per category** : add/edit/delete docs with mandatory/optional flag and ordering
+- Soft deactivate instead of physical delete
+- Frontend pages with table + edit dialog + RequiredDocs modal
+- Bilingual labels (AR/EN) for everything in the catalog
+- **Features 16, 17, 18 end-to-end ✅**
 
 ### 🔜 Sprint 4 — Request submission (M7)
 
@@ -715,6 +722,29 @@ All endpoints are prefixed with `/api`. Authentication: Bearer JWT issued by Key
 | `PATCH` | `/admin/users/{id}` | Update |
 | `POST` | `/admin/users/{id}/deactivate` | Soft delete |
 | `POST` | `/admin/users/{id}/reactivate` | Restore |
+
+### Admin — Catalog (Sprint 3)
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/admin/catalog/categories` | List all categories |
+| `POST` | `/admin/catalog/categories` | Create category |
+| `PATCH` | `/admin/catalog/categories/{id}` | Update |
+| `POST` | `/admin/catalog/categories/{id}/deactivate` | Soft disable |
+| `POST` | `/admin/catalog/categories/{id}/reactivate` | Re-enable |
+| `GET` | `/admin/catalog/questions?categoryId=` | List questions |
+| `POST` | `/admin/catalog/questions` | Create |
+| `PATCH` | `/admin/catalog/questions/{id}` | Update |
+| `POST` | `/admin/catalog/questions/{id}/deactivate` | Soft disable |
+| `POST` | `/admin/catalog/questions/{id}/reactivate` | Re-enable |
+| `GET` | `/admin/catalog/values` | List A/B/C/D |
+| `POST` | `/admin/catalog/values` | Create |
+| `PATCH` | `/admin/catalog/values/{id}` | Update |
+| `POST` | `/admin/catalog/values/{id}/deactivate` | Soft disable |
+| `POST` | `/admin/catalog/values/{id}/reactivate` | Re-enable |
+| `GET` | `/admin/catalog/categories/{id}/required-documents` | List docs |
+| `POST` | `/admin/catalog/categories/{id}/required-documents` | Add doc |
+| `PATCH` | `/admin/catalog/required-documents/{id}` | Update doc |
+| `DELETE` | `/admin/catalog/required-documents/{id}` | Remove doc |
 
 All admin endpoints require `ROLE_PLATFORM_ADMIN`.
 

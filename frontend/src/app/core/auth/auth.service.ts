@@ -41,7 +41,12 @@ export class AuthService {
   }
 
   getUsername(): string {
-    return this.keycloak.getUsername() || '';
+    try {
+      return this.keycloak.getUsername() || '';
+    } catch {
+      const token = this.keycloak.getKeycloakInstance().tokenParsed as any;
+      return token?.preferred_username || token?.email || token?.name || '';
+    }
   }
 
   getToken(): Promise<string> {

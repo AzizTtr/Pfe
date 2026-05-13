@@ -149,7 +149,20 @@ export class DashboardComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.api.get<UserProfile>('/users/me').subscribe(p => this.profile.set(p));
+    this.api.get<UserProfile>('/users/me').subscribe({
+      next: p => this.profile.set(p),
+      error: () => {
+        const role = this.auth.getRoles().find(r => r.startsWith('ROLE_')) || '';
+        const username = this.auth.getUsername();
+        this.profile.set({
+          id: 0,
+          email: username,
+          fullName: username || 'Admin',
+          role,
+          preferredLang: 'ar'
+        });
+      }
+    });
   }
 
   initials(): string {

@@ -11,7 +11,9 @@ export const adminRoutes: Routes = [
     loadComponent: () =>
       import('./admin-shell.component').then(m => m.AdminShellComponent),
     children: [
-      { path: '',              redirectTo: 'registrations', pathMatch: 'full' },
+      { path: '',              redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard',     loadComponent: () =>
+          import('./dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent) },
       { path: 'registrations', loadComponent: () =>
           import('./registrations/registrations.component').then(m => m.RegistrationsComponent) },
       { path: 'users',         loadComponent: () =>

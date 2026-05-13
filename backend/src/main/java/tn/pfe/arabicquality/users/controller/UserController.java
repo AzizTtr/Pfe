@@ -13,6 +13,7 @@ import tn.pfe.arabicquality.users.domain.User;
 import tn.pfe.arabicquality.users.dto.UserDtos;
 import tn.pfe.arabicquality.users.repository.UserRepository;
 import tn.pfe.arabicquality.users.service.KeycloakAdminService;
+import tn.pfe.arabicquality.users.service.UserSyncService;
 
 import java.util.Map;
 
@@ -31,11 +32,12 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final KeycloakAdminService keycloakAdmin;
+    private final UserSyncService userSyncService;
 
     @GetMapping("/me")
     public ResponseEntity<?> me(@AuthenticationPrincipal Jwt jwt) {
         User user = userRepository.findByKcId(jwt.getSubject())
-                .orElseThrow(() -> new RuntimeException("Profil non trouvé"));
+                .orElseGet(() -> userSyncService.syncFromJwt(jwt));
         return ResponseEntity.ok(toView(user));
     }
 

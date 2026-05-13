@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../../../core/api/api.service';
@@ -202,6 +203,7 @@ export class RegistrationsComponent implements OnInit {
   private api = inject(ApiService);
   private toastr = inject(ToastrService);
   private translate = inject(TranslateService);
+  private route = inject(ActivatedRoute);
 
   statuses = [
     { value: 'PENDING',  label: 'admin.registrations.statuses.PENDING'  },
@@ -218,7 +220,13 @@ export class RegistrationsComponent implements OnInit {
   counts = signal<Record<string, number>>({});
   reason = '';
 
-  ngOnInit(): void { this.fetch(); }
+  ngOnInit(): void {
+    const status = this.route.snapshot.queryParamMap.get('status');
+    if (status === 'PENDING' || status === 'APPROVED' || status === 'REJECTED') {
+      this.status.set(status);
+    }
+    this.fetch();
+  }
 
   setStatus(s: any): void { this.status.set(s); this.fetch(); }
 

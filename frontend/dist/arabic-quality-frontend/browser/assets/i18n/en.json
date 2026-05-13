@@ -1,0 +1,294 @@
+{
+  "app": {
+    "title": "Arabic Teaching Quality Platform for Non-Native Speakers"
+  },
+  "menu": {
+    "home": "Home",
+    "my_requests": "My Requests",
+    "evaluation": "Evaluation",
+    "registrations": "Registrations",
+    "admin": "Admin Panel",
+    "dashboard": "Dashboard",
+    "login": "Sign in",
+    "logout": "Sign out",
+    "profile": "Profile",
+    "live": "System Live"
+  },
+  "home": {
+    "badge": "Officially Certified",
+    "title": "Arabic Quality Platform",
+    "title2": "for Non-Native Speakers",
+    "subtitle": "A comprehensive platform that automates the full evaluation cycle — from institution registration to the issuance of an official report, with confidence and transparency.",
+    "cta": "Get Started",
+    "secondary_cta": "Explore Features",
+    "section_quick": "Quick Access",
+    "section_components": "System Components",
+    "stats": {
+      "features": "Features",
+      "roles": "Roles",
+      "languages": "Languages",
+      "audit": "Auditable"
+    },
+    "card": {
+      "getStarted":  { "t": "Getting Started",     "d": "Quick guide to using the platform" },
+      "entities":    { "t": "Educational Entities","d": "Register and track institutions" },
+      "evaluation":  { "t": "Evaluation Team",     "d": "Review and grade submissions" },
+      "approvals":   { "t": "Approvals",           "d": "Administrative → Field → Final" },
+      "admin":       { "t": "Admin Panel",         "d": "Categories, questions, reports, audit" },
+      "input":       { "t": "Basic Input",         "d": "Forms, fields, file upload" },
+      "collections": { "t": "Collections",         "d": "Categories, questions, values" },
+      "navigation":  { "t": "Navigation",          "d": "Dashboards & workflows" },
+      "info":        { "t": "Status & Info",       "d": "Notifications, audit log, badges" }
+    }
+  },
+  "register": {
+    "title": "Register a new institution",
+    "subtitle": "Fill in the form — your request will be reviewed by the platform admin",
+    "entity_name": "Institution name",
+    "manager_name": "Manager name",
+    "country": "Country",
+    "city": "City",
+    "email": "Email",
+    "phone": "Phone",
+    "description": "Short description",
+    "submit": "Submit request",
+    "success": "Request submitted successfully",
+    "error": "An error occurred, please try again later"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Overview of your account and activity",
+    "role": "Role",
+    "lang": "Preferred language",
+    "loading": "Loading...",
+    "quick_actions": "Quick actions",
+    "help_title": "Need help?",
+    "help_desc": "Contact the platform admin or check the documentation for detailed guidance.",
+    "act": {
+      "profile":       { "t": "My profile",          "d": "Edit your info and preferences" },
+      "my_requests":   { "t": "My requests",         "d": "Track all evaluation requests" },
+      "new_request":   { "t": "New request",         "d": "Submit a new evaluation request" },
+      "inbox":         { "t": "Review inbox",        "d": "Requests assigned to you" },
+      "registrations": { "t": "Registrations",       "d": "Approve new institutions" },
+      "users":         { "t": "Users",               "d": "Manage accounts and permissions" },
+      "reports":       { "t": "Reports",             "d": "Statistics and analytics" }
+    }
+  },
+  "comingSoon": {
+    "in_progress": "In progress",
+    "planned":     "Planned",
+    "scheduled":   "Scheduled in"
+  },
+  "profile": {
+    "title": "My profile",
+    "subtitle": "Manage your personal info and account preferences",
+    "identity": "Identity",
+    "identity_desc": "Update your name and phone — email is bound to your account",
+    "full_name": "Full name",
+    "email_locked": "Email cannot be modified — it is bound to your Keycloak account",
+    "preferences": "Preferences",
+    "preferences_desc": "Language and theme — applied instantly",
+    "language": "Preferred language",
+    "theme": "Theme",
+    "theme_dark":  "Dark",
+    "theme_light": "Light",
+    "security": "Security",
+    "security_desc": "Manage password, 2FA and sessions",
+    "password": "Password",
+    "password_desc": "Change your password securely via an encrypted email",
+    "password_change": "Change",
+    "password_email_sent": "Password reset email sent",
+    "mfa": "Two-factor authentication (TOTP)",
+    "mfa_desc": "Add an extra layer of security with an authenticator app",
+    "signout_all": "Sign out",
+    "signout_all_desc": "End the current session on all devices",
+    "save": "Save changes",
+    "saved": "Changes saved",
+    "account_info": "Account info",
+    "account_id": "Account ID",
+    "account_provider": "Auth provider",
+    "last_login": "Last login",
+    "kc_id": "Keycloak ID",
+    "privacy": "Your privacy is protected",
+    "privacy_desc": "Your data is encrypted and stored securely",
+    "privacy_note": "Passwords and sessions are fully managed by Keycloak. Our platform never stores raw passwords."
+  },
+  "entity": {
+    "requests": { "title": "My requests", "subtitle": "Track all evaluation requests you submitted", "new": "Submit new request" },
+    "new_request":    {
+      "title": "New evaluation request",
+      "subtitle": "Pick categories and answer questions",
+      "desc": "Dynamic form to submit a new evaluation request. Select categories, answer questions, and attach required documents.",
+      "it1": "Multi-select categories",
+      "it2": "Dynamic A/B/C/D rated questions",
+      "it3": "Mandatory file uploads per category",
+      "it4": "Save as draft before submission"
+    },
+    "request_detail": {
+      "title": "Request details",
+      "subtitle": "Summary, status and final result",
+      "desc": "View all request details: answers, attachments, evaluator notes, status, and final result.",
+      "it1": "View answers and attachments per category",
+      "it2": "Track processing stages",
+      "it3": "View final score and grade",
+      "it4": "Download official PDF report"
+    }
+  },
+  "evaluation": {
+    "inbox": {
+      "title": "Submitted requests",
+      "subtitle": "Requests assigned to you for review",
+      "desc": "Inbox for evaluation team — all assigned requests with filters.",
+      "it1": "Filterable table with status badges",
+      "it2": "Advanced filters (category, date, institution)",
+      "it3": "In-progress request counter",
+      "it4": "Real-time notifications"
+    },
+    "review": {
+      "title": "Review request",
+      "subtitle": "Answers, attachments and decision",
+      "desc": "Comprehensive review interface to browse answers, adjust ratings, add notes, and issue decisions.",
+      "it1": "View answers and attachments in viewer",
+      "it2": "Adjust initial A/B/C/D ratings",
+      "it3": "Write notes per category",
+      "it4": "Issue initial decision"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin dashboard",
+      "subtitle": "Live overview of registration requests and platform actions",
+      "pending_title": "Pending registration requests",
+      "pending_subtitle": "Newest institutions waiting for your review",
+      "view_all": "View all",
+      "submitted": "Submitted",
+      "no_pending": "No pending registration requests",
+      "cards": {
+        "pending": "Waiting for review",
+        "approved": "Approved institutions",
+        "rejected": "Rejected requests"
+      }
+    },
+    "catalog": {
+      "add": "Add",
+      "edit": "Edit",
+      "save": "Save",
+      "saved": "Saved",
+      "empty": "No catalog items",
+      "code": "Code",
+      "name": "Name",
+      "name_ar": "Arabic name",
+      "name_en": "English name",
+      "description_ar": "Arabic description",
+      "description_en": "English description",
+      "order": "Order",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "deactivate": "Deactivate",
+      "reactivate": "Reactivate",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "shell": {
+      "title": "Admin Panel",
+      "subtitle": "Full platform administration — users, categories, questions, reports"
+    },
+    "registrations": {
+      "title": "Registration requests",
+      "subtitle": "Review new institution registration requests",
+      "entity": "Institution",
+      "manager": "Manager",
+      "location": "Location",
+      "status": "Status",
+      "review": "Review",
+      "approve": "Approve",
+      "reject": "Reject",
+      "total": "requests",
+      "empty": "No requests in this status",
+      "approved_at": "Approved on",
+      "rejection_reason": "Rejection reason",
+      "reason_placeholder": "Write your notes (required for rejection)...",
+      "approved_ok": "Approved and email sent",
+      "rejected_ok": "Rejected and entity notified",
+      "statuses": {
+        "PENDING":  "Pending",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      }
+    },
+    "users": {
+      "title": "User management",
+      "subtitle": "Add, edit, deactivate accounts",
+      "user": "User",
+      "role": "Role",
+      "status": "Status",
+      "last_login": "Last login",
+      "search": "Search by name or email...",
+      "all_roles": "All roles",
+      "active": "Active",
+      "inactive": "Inactive",
+      "add": "Add user",
+      "create": "Create",
+      "cancel": "Cancel",
+      "deactivate": "Deactivate",
+      "reactivate": "Reactivate",
+      "full_name": "Full name",
+      "empty": "No users",
+      "create_hint": "An email will be sent automatically to set up the password.",
+      "created_ok": "Account created",
+      "deactivated_ok": "Account deactivated",
+      "reactivated_ok": "Account reactivated"
+    },
+    "categories":  {
+      "title": "Evaluation categories", "subtitle": "Organize the core evaluation categories",
+      "questions_count": "Questions",
+      "it1": "CRUD for categories (add, edit, delete)",
+      "it2": "Bilingual labels and descriptions (AR / EN)",
+      "it3": "Manage required attachments per category",
+      "it4": "Order categories by priority"
+    },
+    "questions":   {
+      "title": "Questions", "subtitle": "Bind questions to categories and manage them",
+      "all_categories": "All categories",
+      "total": "questions",
+      "question": "Question",
+      "attachment": "Requires attachment",
+      "text_ar": "Arabic question",
+      "text_en": "English question",
+      "it1": "Create new questions and link to categories",
+      "it2": "Toggle if answer requires an attachment",
+      "it3": "Order questions inside each category",
+      "it4": "Activate / deactivate questions"
+    },
+    "values":      {
+      "title": "Values & scores", "subtitle": "A/B/C/D values and numeric scores",
+      "score": "Score",
+      "it1": "Edit value labels (Fully compliant, Largely compliant, …)",
+      "it2": "Tune numeric score for each value",
+      "it3": "Set display order in forms",
+      "it4": "Activate / deactivate value without losing history"
+    },
+    "assignments": {
+      "title": "Request distribution", "subtitle": "Assign requests to team members",
+      "it1": "Auto-distribution based on workload",
+      "it2": "Manual assignment with member picker",
+      "it3": "Reassign delayed requests",
+      "it4": "Per-member workload dashboard"
+    },
+    "audit":       {
+      "title": "Audit log", "subtitle": "Trace every system action",
+      "aop_note": "AOP infrastructure is active and logs every sensitive operation. The visualization UI is coming in Sprint 7.",
+      "it1": "Timeline of all operations (create, update, delete, login)",
+      "it2": "Advanced filtering by user, type, date",
+      "it3": "Export logs in multiple formats (JSON / CSV)",
+      "it4": "Link events to trace a specific request"
+    },
+    "reports":     {
+      "title": "Advanced reports",
+      "subtitle": "Comprehensive statistics and performance analysis",
+      "requests_status": "Requests by status",
+      "avg_score": "Average score by category"
+    }
+  }
+}
