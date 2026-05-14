@@ -926,7 +926,7 @@ Verify backend logs — you should see `Registration submitted #X for entity 'Y'
 
 **PFE — Projet de Fin d'Études** · 2026
 
-Developed by **Badr Zayani** — `mohamed.zayani-e@erlm.tn`
+Developed by **Mohammed Aziz Tatar** — `mohammedaziz.tatar@esprit.tn`
 
 Inspired by the cahier des charges from HAD.SA for the project *"مقياس جودة تعليم اللغة العربية لغير الناطقين بها"*.
 
