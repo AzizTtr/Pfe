@@ -64,7 +64,7 @@ const ROLES = [
           <option [ngValue]="null">{{ 'admin.users.all_roles' | translate }}</option>
           <option *ngFor="let r of roles" [ngValue]="r">{{ r }}</option>
         </select>
-        <span class="ms-auto text-xs text-white/50">{{ totalElements() }} users</span>
+        <span class="ms-auto text-xs text-white/50">{{ totalElements() }} {{ 'admin.users.total' | translate }}</span>
       </div>
 
       <!-- Table -->
@@ -96,7 +96,7 @@ const ROLES = [
               <td class="px-4 py-3 hidden md:table-cell">
                 <span class="text-[11px] font-bold uppercase tracking-wider px-2 py-1 rounded-full
                              bg-royal-500/15 text-royal-500 border border-royal-500/30">
-                  {{ shortRole(u.role) }}
+                  {{ roleLabel(u) }}
                 </span>
               </td>
               <td class="px-4 py-3 hidden lg:table-cell text-white/55 text-xs">
@@ -214,7 +214,7 @@ export class UsersComponent implements OnInit {
 
     this.api.get<Page<UserRow>>('/admin/users', params).subscribe({
       next: p => { this.rows.set(p.content); this.totalElements.set(p.totalElements); this.loading.set(false); },
-      error: e => { this.loading.set(false); this.toastr.error(e?.error?.error || 'Error'); }
+      error: e => { this.loading.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
     });
   }
 
@@ -240,7 +240,7 @@ export class UsersComponent implements OnInit {
         this.toastr.success(this.translate.instant('admin.users.created_ok'));
         this.busy.set(false); this.creating.set(false); this.fetch();
       },
-      error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || 'Error'); }
+      error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
     });
   }
 
@@ -253,7 +253,7 @@ export class UsersComponent implements OnInit {
           : 'admin.users.reactivated_ok'));
         this.fetch();
       },
-      error: e => this.toastr.error(e?.error?.error || 'Error')
+      error: e => this.toastr.error(e?.error?.error || this.translate.instant('register.error'))
     });
   }
 
@@ -261,5 +261,7 @@ export class UsersComponent implements OnInit {
     return name.split(' ').slice(0,2).map(s => s[0] || '').join('').toUpperCase();
   }
 
-  shortRole(r: string): string { return r.replace('ROLE_', ''); }
+  roleLabel(u: UserRow): string {
+    return this.translate.currentLang === 'ar' ? u.roleNameAr : u.roleNameEn;
+  }
 }

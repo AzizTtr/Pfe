@@ -241,7 +241,7 @@ export class RegistrationsComponent implements OnInit {
           this.counts.set(c);
           this.loading.set(false);
         },
-        error: e => { this.loading.set(false); this.toastr.error(e?.error?.error || 'Error'); }
+        error: e => { this.loading.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
       });
   }
 
@@ -257,7 +257,7 @@ export class RegistrationsComponent implements OnInit {
           this.toastr.success(this.translate.instant('admin.registrations.approved_ok'));
           this.busy.set(false); this.close(); this.fetch();
         },
-        error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || 'Error'); }
+        error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
       });
   }
 
@@ -270,7 +270,7 @@ export class RegistrationsComponent implements OnInit {
           this.toastr.success(this.translate.instant('admin.registrations.rejected_ok'));
           this.busy.set(false); this.close(); this.fetch();
         },
-        error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || 'Error'); }
+        error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
       });
   }
 

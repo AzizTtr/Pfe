@@ -12,7 +12,10 @@
     "login": "Sign in",
     "logout": "Sign out",
     "profile": "Profile",
-    "live": "System Live"
+    "live": "System Live",
+    "change_language": "Change language",
+    "brand": "Arabic Quality",
+    "platform": "Platform"
   },
   "home": {
     "badge": "Officially Certified",
@@ -30,15 +33,42 @@
       "audit": "Auditable"
     },
     "card": {
-      "getStarted":  { "t": "Getting Started",     "d": "Quick guide to using the platform" },
-      "entities":    { "t": "Educational Entities","d": "Register and track institutions" },
-      "evaluation":  { "t": "Evaluation Team",     "d": "Review and grade submissions" },
-      "approvals":   { "t": "Approvals",           "d": "Administrative → Field → Final" },
-      "admin":       { "t": "Admin Panel",         "d": "Categories, questions, reports, audit" },
-      "input":       { "t": "Basic Input",         "d": "Forms, fields, file upload" },
-      "collections": { "t": "Collections",         "d": "Categories, questions, values" },
-      "navigation":  { "t": "Navigation",          "d": "Dashboards & workflows" },
-      "info":        { "t": "Status & Info",       "d": "Notifications, audit log, badges" }
+      "getStarted": {
+        "t": "Getting Started",
+        "d": "Quick guide to using the platform"
+      },
+      "entities": {
+        "t": "Educational Entities",
+        "d": "Register and track institutions"
+      },
+      "evaluation": {
+        "t": "Evaluation Team",
+        "d": "Review and grade submissions"
+      },
+      "approvals": {
+        "t": "Approvals",
+        "d": "Administrative → Field → Final"
+      },
+      "admin": {
+        "t": "Admin Panel",
+        "d": "Categories, questions, reports, audit"
+      },
+      "input": {
+        "t": "Basic Input",
+        "d": "Forms, fields, file upload"
+      },
+      "collections": {
+        "t": "Collections",
+        "d": "Categories, questions, values"
+      },
+      "navigation": {
+        "t": "Navigation",
+        "d": "Dashboards & workflows"
+      },
+      "info": {
+        "t": "Status & Info",
+        "d": "Notifications, audit log, badges"
+      }
     }
   },
   "register": {
@@ -65,19 +95,40 @@
     "help_title": "Need help?",
     "help_desc": "Contact the platform admin or check the documentation for detailed guidance.",
     "act": {
-      "profile":       { "t": "My profile",          "d": "Edit your info and preferences" },
-      "my_requests":   { "t": "My requests",         "d": "Track all evaluation requests" },
-      "new_request":   { "t": "New request",         "d": "Submit a new evaluation request" },
-      "inbox":         { "t": "Review inbox",        "d": "Requests assigned to you" },
-      "registrations": { "t": "Registrations",       "d": "Approve new institutions" },
-      "users":         { "t": "Users",               "d": "Manage accounts and permissions" },
-      "reports":       { "t": "Reports",             "d": "Statistics and analytics" }
+      "profile": {
+        "t": "My profile",
+        "d": "Edit your info and preferences"
+      },
+      "my_requests": {
+        "t": "My requests",
+        "d": "Track all evaluation requests"
+      },
+      "new_request": {
+        "t": "New request",
+        "d": "Submit a new evaluation request"
+      },
+      "inbox": {
+        "t": "Review inbox",
+        "d": "Requests assigned to you"
+      },
+      "registrations": {
+        "t": "Registrations",
+        "d": "Approve new institutions"
+      },
+      "users": {
+        "t": "Users",
+        "d": "Manage accounts and permissions"
+      },
+      "reports": {
+        "t": "Reports",
+        "d": "Statistics and analytics"
+      }
     }
   },
   "comingSoon": {
     "in_progress": "In progress",
-    "planned":     "Planned",
-    "scheduled":   "Scheduled in"
+    "planned": "Planned",
+    "scheduled": "Scheduled in"
   },
   "profile": {
     "title": "My profile",
@@ -90,7 +141,7 @@
     "preferences_desc": "Language and theme — applied instantly",
     "language": "Preferred language",
     "theme": "Theme",
-    "theme_dark":  "Dark",
+    "theme_dark": "Dark",
     "theme_light": "Light",
     "security": "Security",
     "security_desc": "Manage password, 2FA and sessions",
@@ -111,18 +162,76 @@
     "kc_id": "Keycloak ID",
     "privacy": "Your privacy is protected",
     "privacy_desc": "Your data is encrypted and stored securely",
-    "privacy_note": "Passwords and sessions are fully managed by Keycloak. Our platform never stores raw passwords."
+    "privacy_note": "Passwords and sessions are fully managed by Keycloak. Our platform never stores raw passwords.",
+    "personal_identity": "Personal identity",
+    "personal_identity_desc": "Shape how your account appears across the platform.",
+    "complete": "complete",
+    "upload_photo": "Upload photo",
+    "remove_photo": "Remove photo",
+    "job_title": "Professional title",
+    "job_title_placeholder": "Institution manager",
+    "organization": "Organization",
+    "organization_placeholder": "Your institution",
+    "bio": "About you",
+    "bio_placeholder": "Add a short note about your role, institution, or evaluation responsibilities.",
+    "avatar_color": "Avatar color",
+    "avatar_url": "Profile picture",
+    "avatar_url_placeholder": "Upload a local image",
+    "personalization": "Personalization",
+    "personalization_desc": "Tune the workspace to match how you prefer to work.",
+    "timezone": "Timezone",
+    "dashboard_density": "Dashboard density",
+    "comfortable": "Comfortable",
+    "compact": "Compact",
+    "email_notifications": "Email notifications",
+    "email_notifications_desc": "Receive account and workflow updates by email.",
+    "bio_empty": "Add a short bio to make your profile easier to recognize.",
+    "density": "Density",
+    "avatar_image_error": "Please choose an image file.",
+    "avatar_size_error": "Profile picture must be smaller than 2 MB.",
+    "auth_provider_value": "Keycloak OIDC",
+    "identity_badge": "ID"
   },
   "entity": {
-    "requests": { "title": "My requests", "subtitle": "Track all evaluation requests you submitted", "new": "Submit new request" },
-    "new_request":    {
+    "requests": {
+      "title": "My requests",
+      "subtitle": "Track all evaluation requests you submitted",
+      "new": "Submit new request",
+      "all_statuses": "All statuses",
+      "visible": "visible",
+      "request": "Request",
+      "resources": "Resources",
+      "status": "Status",
+      "submitted": "Submitted",
+      "categories_count": "categories",
+      "answers_count": "answers",
+      "files_count": "files",
+      "empty": "No evaluation requests yet."
+    },
+    "new_request": {
       "title": "New evaluation request",
       "subtitle": "Pick categories and answer questions",
       "desc": "Dynamic form to submit a new evaluation request. Select categories, answer questions, and attach required documents.",
       "it1": "Multi-select categories",
       "it2": "Dynamic A/B/C/D rated questions",
       "it3": "Mandatory file uploads per category",
-      "it4": "Save as draft before submission"
+      "it4": "Save as draft before submission",
+      "empty_catalog_admin": "No active catalog categories are available yet. Ask the platform admin to add categories/questions, or restart the backend so the starter catalog migration can run.",
+      "select_category": "Select at least one category to build the evaluation form.",
+      "empty_catalog": "The request form needs active catalog resources before it can be used.",
+      "questions_count": "questions",
+      "docs_count": "documents",
+      "optional_note": "Optional note",
+      "required_documents": "Required documents",
+      "mandatory": "Mandatory",
+      "optional": "Optional",
+      "save_draft": "Save draft",
+      "submit_request": "Submit request",
+      "validation_missing": "Answer all questions and attach mandatory documents first.",
+      "upload_failed": "Upload failed",
+      "submit_failed": "Submit failed",
+      "draft_saved": "Draft saved",
+      "request_submitted": "Request submitted"
     },
     "request_detail": {
       "title": "Request details",
@@ -131,27 +240,47 @@
       "it1": "View answers and attachments per category",
       "it2": "Track processing stages",
       "it3": "View final score and grade",
-      "it4": "Download official PDF report"
+      "it4": "Download official PDF report",
+      "answers": "Answers",
+      "categories": "Categories",
+      "attachments": "Attachments",
+      "no_attachments": "No attachments."
     }
   },
   "evaluation": {
     "inbox": {
       "title": "Submitted requests",
       "subtitle": "Requests assigned to you for review",
-      "desc": "Inbox for evaluation team — all assigned requests with filters.",
-      "it1": "Filterable table with status badges",
-      "it2": "Advanced filters (category, date, institution)",
-      "it3": "In-progress request counter",
-      "it4": "Real-time notifications"
+      "desc": "Inbox for evaluation team with assigned requests and filters.",
+      "all": "All",
+      "refresh": "Refresh",
+      "request": "Request",
+      "entity": "Institution",
+      "status": "Status",
+      "answers": "Answers",
+      "action": "Action",
+      "categories": "categories",
+      "open": "Open review",
+      "empty": "No requests match this filter."
     },
     "review": {
       "title": "Review request",
       "subtitle": "Answers, attachments and decision",
-      "desc": "Comprehensive review interface to browse answers, adjust ratings, add notes, and issue decisions.",
-      "it1": "View answers and attachments in viewer",
-      "it2": "Adjust initial A/B/C/D ratings",
-      "it3": "Write notes per category",
-      "it4": "Issue initial decision"
+      "desc": "Browse answers, adjust final ratings, add notes, and issue workflow decisions.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "request_info": "Request info",
+      "initial": "Initial",
+      "save_rating": "Save rating",
+      "rating_saved": "Rating saved",
+      "rating_failed": "Rating could not be saved",
+      "note_placeholder": "Evaluator note...",
+      "attachments": "Attachments",
+      "decision_notes": "Decision notes",
+      "decision_saved": "Decision saved",
+      "decision_failed": "Decision could not be saved",
+      "history": "Decision history",
+      "no_decisions": "No decisions yet."
     }
   },
   "admin": {
@@ -227,7 +356,7 @@
       "approved_ok": "Approved and email sent",
       "rejected_ok": "Rejected and entity notified",
       "statuses": {
-        "PENDING":  "Pending",
+        "PENDING": "Pending",
         "APPROVED": "Approved",
         "REJECTED": "Rejected"
       }
@@ -253,18 +382,21 @@
       "create_hint": "An email will be sent automatically to set up the password.",
       "created_ok": "Account created",
       "deactivated_ok": "Account deactivated",
-      "reactivated_ok": "Account reactivated"
+      "reactivated_ok": "Account reactivated",
+      "total": "users"
     },
-    "categories":  {
-      "title": "Evaluation categories", "subtitle": "Organize the core evaluation categories",
+    "categories": {
+      "title": "Evaluation categories",
+      "subtitle": "Organize the core evaluation categories",
       "questions_count": "Questions",
       "it1": "CRUD for categories (add, edit, delete)",
       "it2": "Bilingual labels and descriptions (AR / EN)",
       "it3": "Manage required attachments per category",
       "it4": "Order categories by priority"
     },
-    "questions":   {
-      "title": "Questions", "subtitle": "Bind questions to categories and manage them",
+    "questions": {
+      "title": "Questions",
+      "subtitle": "Bind questions to categories and manage them",
       "all_categories": "All categories",
       "total": "questions",
       "question": "Question",
@@ -276,34 +408,126 @@
       "it3": "Order questions inside each category",
       "it4": "Activate / deactivate questions"
     },
-    "values":      {
-      "title": "Values & scores", "subtitle": "A/B/C/D values and numeric scores",
+    "values": {
+      "title": "Values & scores",
+      "subtitle": "A/B/C/D values and numeric scores",
       "score": "Score",
       "it1": "Edit value labels (Fully compliant, Largely compliant, …)",
       "it2": "Tune numeric score for each value",
       "it3": "Set display order in forms",
-      "it4": "Activate / deactivate value without losing history"
+      "it4": "Activate / deactivate value without losing history",
+      "points": "pts"
     },
     "assignments": {
-      "title": "Request distribution", "subtitle": "Assign requests to team members",
-      "it1": "Auto-distribution based on workload",
-      "it2": "Manual assignment with member picker",
-      "it3": "Reassign delayed requests",
-      "it4": "Per-member workload dashboard"
+      "title": "Request distribution",
+      "subtitle": "Assign requests to team members",
+      "request": "Request",
+      "pick_request": "Pick a request",
+      "stage": "Stage",
+      "member": "Team member",
+      "pick_member": "Pick a member",
+      "assign": "Assign",
+      "entity": "Institution",
+      "mode": "Mode",
+      "auto": "Auto",
+      "manual": "Manual",
+      "empty": "No assignments yet.",
+      "assigned_ok": "Request assigned",
+      "assign_failed": "Assignment failed",
+      "initial": "Initial evaluation",
+      "admin_review": "Admin review",
+      "field_review": "Field review",
+      "stages": {
+        "INITIAL_EVALUATION": "Initial evaluation",
+        "ADMIN_REVIEW": "Admin review",
+        "FIELD_REVIEW": "Field review"
+      }
     },
-    "audit":       {
-      "title": "Audit log", "subtitle": "Trace every system action",
+    "audit": {
+      "title": "Audit log",
+      "subtitle": "Trace every system action",
       "aop_note": "AOP infrastructure is active and logs every sensitive operation. The visualization UI is coming in Sprint 7.",
       "it1": "Timeline of all operations (create, update, delete, login)",
       "it2": "Advanced filtering by user, type, date",
       "it3": "Export logs in multiple formats (JSON / CSV)",
-      "it4": "Link events to trace a specific request"
+      "it4": "Link events to trace a specific request",
+      "aop_active": "AOP active"
     },
-    "reports":     {
+    "reports": {
       "title": "Advanced reports",
-      "subtitle": "Comprehensive statistics and performance analysis",
+      "subtitle": "Live platform analytics extracted from registrations, users, catalog resources, and evaluation requests",
       "requests_status": "Requests by status",
-      "avg_score": "Average score by category"
+      "avg_score": "Average score by category",
+      "refresh": "Refresh",
+      "registrations_status": "Registration requests by status",
+      "catalog_resources": "Catalog resources",
+      "source_catalog": "From catalog tables",
+      "category_table": "Categories, questions, and required documents",
+      "value_scale": "Evaluation value scale",
+      "user_roles": "Users by role",
+      "users": "Users",
+      "recent_registrations": "Recent registrations",
+      "evaluation_statuses": "Evaluation requests by workflow status",
+      "no_live_rows": "No live rows yet",
+      "live_db": "Live DB",
+      "export_failed": "Export failed",
+      "kpi": {
+        "pending_registrations": "Pending registrations",
+        "approved_registrations": "Approved registrations",
+        "active_users": "Active users",
+        "catalog_categories": "Catalog categories",
+        "evaluation_requests": "Evaluation requests",
+        "average_score": "Average score",
+        "registrations": "Registration requests",
+        "entities": "Educational entities",
+        "users": "Active users",
+        "requests": "Evaluation requests",
+        "questions": "Catalog questions",
+        "requiredDocs": "Required documents"
+      }
     }
+  },
+  "common": {
+    "back": "Back",
+    "open": "Open",
+    "bytes": "bytes"
+  },
+  "roles": {
+    "Platform Administrators": "Platform Administrators",
+    "Entity Managers": "Entity Managers",
+    "Evaluation Team Members": "Evaluation Team Members",
+    "Administrative Reviewers": "Administrative Reviewers",
+    "Field Reviewers": "Field Reviewers",
+    "PLATFORM_ADMIN": "Platform admin",
+    "ENTITY_MANAGER": "Entity manager",
+    "EVALUATOR": "Evaluator",
+    "ADMIN_REVIEWER": "Admin reviewer",
+    "FIELD_REVIEWER": "Field reviewer"
+  },
+  "status": {
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "draft": "Draft",
+    "pending_review": "Pending review",
+    "under_evaluation": "Under evaluation",
+    "completed": "Completed",
+    "info_requested": "Info requested",
+    "rejected_initial": "Rejected initial",
+    "approved_initial": "Approved initial",
+    "pending_admin": "Pending admin",
+    "rejected_admin": "Rejected admin",
+    "approved_admin": "Approved admin",
+    "pending_field": "Pending field",
+    "rejected_final": "Rejected final",
+    "approved_final": "Approved final"
+  },
+  "languages": {
+    "en": "English",
+    "ar": "Arabic"
+  },
+  "sprints": {
+    "sprint5_m7": "Sprint 5 (M7)",
+    "sprint7_m7": "Sprint 7 (M7)"
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
 import { ApiService } from '../../../core/api/api.service';
@@ -118,6 +118,7 @@ interface Page<T> {
 export class AdminDashboardComponent implements OnInit {
   private api = inject(ApiService);
   private toastr = inject(ToastrService);
+  private translate = inject(TranslateService);
 
   loading = signal(false);
   pendingRows = signal<RegistrationRow[]>([]);
@@ -167,7 +168,7 @@ export class AdminDashboardComponent implements OnInit {
       },
       error: e => {
         this.loading.set(false);
-        this.toastr.error(e?.error?.error || 'Error');
+        this.toastr.error(e?.error?.error || this.translate.instant('register.error'));
       }
     });
   }

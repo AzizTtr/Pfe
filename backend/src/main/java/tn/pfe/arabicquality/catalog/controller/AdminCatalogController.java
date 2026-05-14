@@ -48,14 +48,22 @@ public class AdminCatalogController {
 
     @PostMapping("/categories/{id}/deactivate")
     public ResponseEntity<?> deactivateCategory(@PathVariable Long id) {
-        catalogAdminService.setCategoryActive(id, false);
-        return ResponseEntity.noContent().build();
+        try {
+            catalogAdminService.setCategoryActive(id, false);
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        }
     }
 
     @PostMapping("/categories/{id}/reactivate")
     public ResponseEntity<?> reactivateCategory(@PathVariable Long id) {
-        catalogAdminService.setCategoryActive(id, true);
-        return ResponseEntity.noContent().build();
+        try {
+            catalogAdminService.setCategoryActive(id, true);
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/questions")
@@ -79,19 +87,29 @@ public class AdminCatalogController {
             return ResponseEntity.ok(catalogAdminService.updateQuestion(id, dto));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 
     @PostMapping("/questions/{id}/deactivate")
     public ResponseEntity<?> deactivateQuestion(@PathVariable Long id) {
-        catalogAdminService.setQuestionActive(id, false);
-        return ResponseEntity.noContent().build();
+        try {
+            catalogAdminService.setQuestionActive(id, false);
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        }
     }
 
     @PostMapping("/questions/{id}/reactivate")
     public ResponseEntity<?> reactivateQuestion(@PathVariable Long id) {
-        catalogAdminService.setQuestionActive(id, true);
-        return ResponseEntity.noContent().build();
+        try {
+            catalogAdminService.setQuestionActive(id, true);
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/values")
@@ -115,19 +133,29 @@ public class AdminCatalogController {
             return ResponseEntity.ok(catalogAdminService.updateValue(id, dto));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 
     @PostMapping("/values/{id}/deactivate")
     public ResponseEntity<?> deactivateValue(@PathVariable Long id) {
-        catalogAdminService.setValueActive(id, false);
-        return ResponseEntity.noContent().build();
+        try {
+            catalogAdminService.setValueActive(id, false);
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        }
     }
 
     @PostMapping("/values/{id}/reactivate")
     public ResponseEntity<?> reactivateValue(@PathVariable Long id) {
-        catalogAdminService.setValueActive(id, true);
-        return ResponseEntity.noContent().build();
+        try {
+            catalogAdminService.setValueActive(id, true);
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        }
     }
 
     // ─────────────────────────────────────────────────────────────────

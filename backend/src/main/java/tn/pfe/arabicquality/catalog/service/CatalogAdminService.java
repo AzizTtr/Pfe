@@ -49,6 +49,11 @@ public class CatalogAdminService {
     public CatalogDtos.CategoryDto updateCategory(Long id, CatalogDtos.CategorySaveDto dto) {
         EvaluationCategory category = categoryRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Category not found: " + id));
+        categoryRepository.findByCodeIgnoreCase(dto.getCode().trim())
+                .filter(existing -> !existing.getId().equals(id))
+                .ifPresent(existing -> {
+                    throw new IllegalStateException("Category code already exists");
+                });
         applyCategory(category, dto);
         return toCategoryDto(categoryRepository.save(category));
     }
@@ -119,6 +124,11 @@ public class CatalogAdminService {
     public CatalogDtos.ValueDto updateValue(Long id, CatalogDtos.ValueSaveDto dto) {
         EvaluationValue value = valueRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Value not found: " + id));
+        valueRepository.findByCodeIgnoreCase(dto.getCode().trim())
+                .filter(existing -> !existing.getId().equals(id))
+                .ifPresent(existing -> {
+                    throw new IllegalStateException("Value code already exists");
+                });
         applyValue(value, dto);
         return toValueDto(valueRepository.save(value));
     }
@@ -166,7 +176,8 @@ public class CatalogAdminService {
         return new CatalogDtos.CategoryDto(
                 category.getId(), category.getCode(), category.getNameAr(), category.getNameEn(),
                 category.getDescriptionAr(), category.getDescriptionEn(), category.getDisplayOrder(),
-                category.isActive(), category.getQuestions() == null ? 0 : category.getQuestions().size());
+                category.isActive(), category.getQuestions() == null ? 0 : category.getQuestions().size(),
+                requiredDocRepository.countByCategoryId(category.getId()));
     }
 
     private CatalogDtos.QuestionDto toQuestionDto(Question question) {

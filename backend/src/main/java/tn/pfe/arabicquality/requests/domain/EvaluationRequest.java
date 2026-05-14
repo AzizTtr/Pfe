@@ -5,9 +5,12 @@ import lombok.*;
 import tn.pfe.arabicquality.common.BaseEntity;
 import tn.pfe.arabicquality.entities.domain.EducationalEntity;
 import tn.pfe.arabicquality.users.domain.User;
+import tn.pfe.arabicquality.catalog.domain.EvaluationCategory;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Demande d'évaluation soumise par une institution.
@@ -35,6 +38,7 @@ public class EvaluationRequest extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
+    @Builder.Default
     private RequestStatus status = RequestStatus.DRAFT;
 
     @Column(name = "submitted_at")
@@ -50,5 +54,15 @@ public class EvaluationRequest extends BaseEntity {
     private Long finalGradeId;
 
     @Column(name = "is_locked", nullable = false)
+    @Builder.Default
     private boolean locked = false;
+
+    @Builder.Default
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "evaluation_request_categories",
+            joinColumns = @JoinColumn(name = "request_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<EvaluationCategory> categories = new HashSet<>();
 }

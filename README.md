@@ -582,26 +582,26 @@ The `aqHeroCrystal` directive mounts a Three.js scene with:
 |---|--------|---------|:-------:|:--------:|:------:|
 | 1 | Public | Inscription Jiha | ✅ | ✅ | **Done** |
 | 2 | Auth | Login (Keycloak OIDC) | ✅ | ✅ | **Done** |
-| 3 | Entity | Soumettre demande | 🟡 | 🟡 | Sprint 4 |
-| 4 | Entity | Suivi statut | 🟡 | 🟡 | Sprint 4 |
+| 3 | Entity | Soumettre demande | ✅ | ✅ | **Done** |
+| 4 | Entity | Suivi statut | ✅ | ✅ | **Done** |
 | 5 | Cross | Notifications email + in-app | ✅ | 🟡 | Partially done |
 | 6 | Entity | Voir résultats finaux | 🟡 | 🟡 | Sprint 6 |
-| 7 | Eval | Inbox équipe | 🟡 | 🟡 | Sprint 5 |
-| 8 | Eval | Réponses + pièces jointes | 🟡 | 🟡 | Sprint 5 |
-| 9 | Eval | Modifier notes | 🟡 | 🟡 | Sprint 5 |
-| 10 | Eval | Décision préliminaire | 🟡 | 🟡 | Sprint 5 |
-| 11 | Approve | Approbation admin | 🟡 | 🟡 | Sprint 5 |
-| 12 | Approve | Approbation terrain | 🟡 | 🟡 | Sprint 5 |
+| 7 | Eval | Inbox ?quipe | ? | ? | **Done** |
+| 8 | Eval | R?ponses + pi?ces jointes | ? | ? | **Done** |
+| 9 | Eval | Modifier notes | ? | ? | **Done** |
+| 10 | Eval | D?cision pr?liminaire | ? | ? | **Done** |
+| 11 | Approve | Approbation admin | ? | ? | **Done** |
+| 12 | Approve | Approbation terrain | ? | ? | **Done** |
 | 13 | Score | Calcul score final | ✅ | — | **Done** |
 | 14 | Notify | Envoi résultat | 🟡 | 🟡 | Sprint 6 |
 | 15 | Admin | Gestion users | ✅ | ✅ | **Done** |
 | 16 | Admin | Catégories + Required Documents | ✅ | ✅ | **Done** |
 | 17 | Admin | Questions | ✅ | ✅ | **Done** |
 | 18 | Admin | Valeurs A/B/C/D | ✅ | ✅ | **Done** |
-| 19 | Admin | Distribution demandes | 🟡 | 🟡 | Sprint 5 |
+| 19 | Admin | Distribution demandes | ? | ? | **Done** |
 | 20 | Admin | Audit log | ✅ | 🟡 | AOP done, UI Sprint 7 |
-| 21 | Admin | Dashboard analytics | 🟡 | ✅ | Sprint 6 |
-| 22 | Admin | Export PDF/Excel | 🟡 | 🟡 | Sprint 6 |
+| 21 | Admin | Dashboard analytics | ✅ | ✅ | **Done** |
+| 22 | Admin | Export PDF/Excel | ✅ | ✅ | **Done** |
 
 **Legend** : ✅ Done end-to-end · 🟡 Skeleton + theme applied, business logic next
 
@@ -665,17 +665,39 @@ The `aqHeroCrystal` directive mounts a Three.js scene with:
 - Bilingual labels (AR/EN) for everything in the catalog
 - **Features 16, 17, 18 end-to-end ✅**
 
-### 🔜 Sprint 4 — Request submission (M7)
+### ✅ Sprint 4 — Request submission (M7)
 
-Dynamic question form, A/B/C/D radio per question, file upload per category, draft/submit, request listing for entity manager.
+- `EvaluationRequestController` for `/requests` workflows.
+- `EvaluationRequestService` supports draft creation, update, and final submission (`DRAFT → PENDING_REVIEW`).
+- `EvaluationAnswer` stores the institution's initial A/B/C/D answers.
+- `EvaluationAttachment` + `FileStorageService` store required documents locally under `app.storage.local.base-path`.
+- `/requests/catalog` exposes active categories, questions, required documents, and A/B/C/D values to entity managers.
+- `/requests/mine` and `/requests/{id}` provide status tracking and read-only detail views for the current entity manager.
+- Frontend `/my-requests/new` has dynamic category selection, rated questions, mandatory document upload, draft save, and submit.
+- Frontend `/my-requests` has a status-filtered tracking table.
+- **Features 3 and 4 end-to-end ✅**
 
-### 🔜 Sprint 5 — Evaluation & Workflow (M7)
+### ? Sprint 5 ? Evaluation & Workflow (M7)
 
-Inbox for evaluators, answer review, rating adjustment, decision (accept/reject/info), state machine, admin/field approval, automatic distribution.
+- Backend workflow endpoints for evaluator/admin/field inbox and request detail.
+- `RequestAssignment` + admin `/admin/assignments` manual distribution.
+- `WorkflowDecision` records decisions per stage with guarded transitions.
+- PATCH final answer ratings and evaluator notes.
+- State machine covers initial evaluation, admin review, field review, rejection, information request, and completion.
+- Auto-assignment to admin/field reviewers after approval transitions.
+- Frontend `/evaluation` inbox with filters and live request table.
+- Frontend `/evaluation/:id` review screen for answers, attachments, final ratings, notes, and decisions.
+- Frontend `/admin/assignments` request distribution screen.
+- **Features 7, 8, 9, 10, 11, 12, and 19 end-to-end ?**
 
-### 🔜 Sprint 6 — Scoring & Reports (M7)
+### 🟡 Sprint 6 — Scoring & Reports (M7)
 
-Auto-scoring on final approval, PDF report generation (iText 7 with Arabic font), Excel export (Apache POI), advanced dashboard charts.
+- `ScoringService` score calculation is available.
+- `AdminReportsController` exposes live analytics from registrations, users, catalog resources, evaluation requests, and value scales.
+- Frontend `/admin/reports` renders live charts/tables from `/admin/reports/dashboard`.
+- PDF export is available from `/admin/reports/export/pdf` using iText 7.
+- Excel export is available from `/admin/reports/export/excel` using Apache POI.
+- Remaining Sprint 6 work: final institution result screen, official per-request report issuance, and result notification workflow.
 
 ### 🔜 Sprint 7 — Audit & Notifications (M7)
 
@@ -748,6 +770,24 @@ All endpoints are prefixed with `/api`. Authentication: Bearer JWT issued by Key
 
 All admin endpoints require `ROLE_PLATFORM_ADMIN`.
 
+### Entity — Evaluation requests (Sprint 4)
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/requests/catalog` | Active categories, questions, required documents, and A/B/C/D values |
+| `GET` | `/requests/mine` | Current entity manager request list |
+| `GET` | `/requests/{id}` | Read-only detail for one owned request |
+| `POST` | `/requests` | Create draft request with selected categories and answers |
+| `PATCH` | `/requests/{id}` | Update a draft request |
+| `POST` | `/requests/{id}/attachments` | Upload a required document file |
+| `POST` | `/requests/{id}/submit` | Submit draft into `PENDING_REVIEW` |
+
+### Admin — Reports (Sprint 6 partial)
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/admin/reports/dashboard` | Live analytics from registrations, users, catalog resources, evaluation requests, and value scale |
+| `GET` | `/admin/reports/export/pdf` | Download the live analytics snapshot as PDF |
+| `GET` | `/admin/reports/export/excel` | Download the live analytics snapshot as Excel `.xlsx` |
+
 **Swagger UI**: `http://localhost:8080/api/swagger-ui`
 
 ---
@@ -760,6 +800,29 @@ Auto-imported via `realm-export/arabic-quality-realm.json`:
 |------|-------|----------|
 | `ROLE_PLATFORM_ADMIN` | `admin@arabic-quality.local` | `Admin@2026` |
 | `ROLE_EVALUATOR` | `evaluator@arabic-quality.local` | `Eval@2026` |
+
+### Demo database data
+
+Flyway fills the database with starter data when the backend starts:
+
+| Migration | Purpose |
+|-----------|---------|
+| `V1__init_schema.sql` | Core schema, roles, admin/evaluator users, A/B/C/D values, grading scale |
+| `V2__seed_sprint4_catalog.sql` | Evaluation categories, questions, and required documents used by `/my-requests/new` |
+| `V3__seed_demo_business_data.sql` | Demo institutions, registration requests, evaluation requests, answers, attachments, assignments, decisions, and notifications |
+| `V5__expand_evaluation_catalog.sql` | Expands the evaluation catalog to 15 categories with 5 clear questions each |
+| `V6__seed_large_demo_dataset.sql` | Adds a large demo dataset: users, entities, registrations, requests, answers, assignments, reports, notifications, and audit rows |
+
+The demo business data is meant to make dashboards and reports readable immediately:
+
+| Area | Seeded examples |
+|------|-----------------|
+| Institutions | `Rabat Arabic Center`, `Tunis Language Institute` |
+| Registrations | pending, approved, and rejected registration requests |
+| Evaluation requests | draft, pending review, under evaluation, and completed requests |
+| Reports | real totals, status distribution, score data, top categories, recent activity |
+
+The seeded demo users use `@demo.local` emails to avoid collisions with Keycloak imported users. When a real entity manager logs in and submits their first request, the backend now creates a default institution automatically if one does not already exist for that account.
 
 To add more accounts:
 1. Open Keycloak admin: http://localhost:8180  (admin / admin)

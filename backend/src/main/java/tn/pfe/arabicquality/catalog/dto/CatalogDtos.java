@@ -23,6 +23,7 @@ public class CatalogDtos {
         private Integer displayOrder;
         private boolean active;
         private int questionCount;
+        private long requiredDocumentCount;
     }
 
     @Data @NoArgsConstructor @AllArgsConstructor

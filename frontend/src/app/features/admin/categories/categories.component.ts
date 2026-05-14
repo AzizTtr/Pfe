@@ -17,6 +17,7 @@ interface CategoryRow {
   displayOrder: number;
   active: boolean;
   questionCount: number;
+  requiredDocumentCount: number;
 }
 
 @Component({
@@ -39,6 +40,7 @@ interface CategoryRow {
               <th class="text-start px-4 py-3">{{ 'admin.catalog.name' | translate }}</th>
               <th class="text-start px-4 py-3 hidden lg:table-cell">{{ 'admin.catalog.order' | translate }}</th>
               <th class="text-start px-4 py-3 hidden md:table-cell">{{ 'admin.categories.questions_count' | translate }}</th>
+              <th class="text-start px-4 py-3 hidden lg:table-cell">{{ 'admin.categories.docs_count' | translate }}</th>
               <th class="text-start px-4 py-3">{{ 'admin.catalog.status' | translate }}</th>
               <th class="text-start px-4 py-3"></th>
             </tr>
@@ -47,11 +49,11 @@ interface CategoryRow {
             <tr *ngFor="let c of rows()" class="border-t border-white/5 hover:bg-white/5 transition">
               <td class="px-4 py-3 font-semibold text-forest-300">{{ c.code }}</td>
               <td class="px-4 py-3">
-                <div class="font-medium">{{ c.nameEn }}</div>
-                <div class="text-xs text-white/55">{{ c.nameAr }}</div>
+                <div class="font-medium">{{ categoryName(c) }}</div>
               </td>
               <td class="px-4 py-3 hidden lg:table-cell text-white/60">{{ c.displayOrder }}</td>
               <td class="px-4 py-3 hidden md:table-cell text-white/60">{{ c.questionCount }}</td>
+              <td class="px-4 py-3 hidden lg:table-cell text-white/60">{{ c.requiredDocumentCount }}</td>
               <td class="px-4 py-3"><span [class]="badgeClass(c.active)">{{ c.active ? ('admin.catalog.active' | translate) : ('admin.catalog.inactive' | translate) }}</span></td>
               <td class="px-4 py-3 text-end">
                 <button (click)="openDocs(c)"
@@ -65,10 +67,10 @@ interface CategoryRow {
               </td>
             </tr>
             <tr *ngIf="!loading() && rows().length === 0">
-              <td colspan="6" class="text-center text-white/50 py-10">{{ 'admin.catalog.empty' | translate }}</td>
+              <td colspan="7" class="text-center text-white/50 py-10">{{ 'admin.catalog.empty' | translate }}</td>
             </tr>
             <tr *ngIf="loading()">
-              <td colspan="6" class="text-center text-white/50 py-10">{{ 'dashboard.loading' | translate }}</td>
+              <td colspan="7" class="text-center text-white/50 py-10">{{ 'dashboard.loading' | translate }}</td>
             </tr>
           </tbody>
         </table>
@@ -79,10 +81,10 @@ interface CategoryRow {
           <h3 class="md:col-span-2 text-xl font-bold gradient-text">{{ editing()!.id ? ('admin.catalog.edit' | translate) : ('admin.catalog.add' | translate) }}</h3>
           <input [(ngModel)]="editing()!.code" name="code" required [placeholder]="'admin.catalog.code' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none">
           <input [(ngModel)]="editing()!.displayOrder" name="displayOrder" type="number" required [placeholder]="'admin.catalog.order' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none">
-          <input [(ngModel)]="editing()!.nameEn" name="nameEn" required [placeholder]="'admin.catalog.name_en' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none">
-          <input [(ngModel)]="editing()!.nameAr" name="nameAr" required [placeholder]="'admin.catalog.name_ar' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none">
-          <textarea [(ngModel)]="editing()!.descriptionEn" name="descriptionEn" rows="3" [placeholder]="'admin.catalog.description_en' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none resize-none"></textarea>
-          <textarea [(ngModel)]="editing()!.descriptionAr" name="descriptionAr" rows="3" [placeholder]="'admin.catalog.description_ar' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none resize-none"></textarea>
+          <input *ngIf="translate.currentLang !== 'ar'" [(ngModel)]="editing()!.nameEn" name="nameEn" required [placeholder]="'admin.catalog.name_en' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none">
+          <input *ngIf="translate.currentLang === 'ar'" [(ngModel)]="editing()!.nameAr" name="nameAr" required [placeholder]="'admin.catalog.name_ar' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none">
+          <textarea *ngIf="translate.currentLang !== 'ar'" [(ngModel)]="editing()!.descriptionEn" name="descriptionEn" rows="3" [placeholder]="'admin.catalog.description_en' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none resize-none"></textarea>
+          <textarea *ngIf="translate.currentLang === 'ar'" [(ngModel)]="editing()!.descriptionAr" name="descriptionAr" rows="3" [placeholder]="'admin.catalog.description_ar' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none resize-none"></textarea>
           <label class="md:col-span-2 text-sm text-white/70 flex items-center gap-2"><input type="checkbox" [(ngModel)]="editing()!.active" name="active"> {{ 'admin.catalog.active' | translate }}</label>
           <div class="md:col-span-2 flex justify-end gap-2 pt-2">
             <button type="button" (click)="close()" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-sm">{{ 'admin.users.cancel' | translate }}</button>
@@ -95,14 +97,14 @@ interface CategoryRow {
       <aq-required-docs-dialog
         *ngIf="docsCategory()"
         [category]="docsCategory()!"
-        (close)="docsCategory.set(null)" />
+        (close)="closeDocs()" />
     </aq-page-shell>
   `
 })
 export class CategoriesComponent implements OnInit {
   private api = inject(ApiService);
   private toastr = inject(ToastrService);
-  private translate = inject(TranslateService);
+  translate = inject(TranslateService);
 
   rows = signal<CategoryRow[]>([]);
   loading = signal(false);
@@ -116,28 +118,33 @@ export class CategoriesComponent implements OnInit {
     this.loading.set(true);
     this.api.get<CategoryRow[]>('/admin/catalog/categories').subscribe({
       next: rows => { this.rows.set(rows); this.loading.set(false); },
-      error: e => { this.loading.set(false); this.toastr.error(e?.error?.error || 'Error'); }
+      error: e => { this.loading.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
     });
   }
 
   openCreate(): void {
-    this.editing.set({ id: 0, code: '', nameAr: '', nameEn: '', descriptionAr: '', descriptionEn: '', displayOrder: this.rows().length + 1, active: true, questionCount: 0 });
+    this.editing.set({ id: 0, code: '', nameAr: '', nameEn: '', descriptionAr: '', descriptionEn: '', displayOrder: this.rows().length + 1, active: true, questionCount: 0, requiredDocumentCount: 0 });
   }
 
   openEdit(row: CategoryRow): void { this.editing.set({ ...row }); }
   close(): void { this.editing.set(null); }
 
   openDocs(row: CategoryRow): void { this.docsCategory.set(row); }
+  closeDocs(): void {
+    this.docsCategory.set(null);
+    this.fetch();
+  }
 
   save(): void {
     const row = this.editing(); if (!row) return;
+    this.fillMissingTranslation(row);
     this.busy.set(true);
     const request = row.id
       ? this.api.patch<CategoryRow>(`/admin/catalog/categories/${row.id}`, row)
       : this.api.post<CategoryRow>('/admin/catalog/categories', row);
     request.subscribe({
       next: () => { this.busy.set(false); this.close(); this.fetch(); this.toastr.success(this.translate.instant('admin.catalog.saved')); },
-      error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || 'Error'); }
+      error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
     });
   }
 
@@ -145,11 +152,22 @@ export class CategoriesComponent implements OnInit {
     const action = row.active ? 'deactivate' : 'reactivate';
     this.api.post<void>(`/admin/catalog/categories/${row.id}/${action}`, {}).subscribe({
       next: () => this.fetch(),
-      error: e => this.toastr.error(e?.error?.error || 'Error')
+      error: e => this.toastr.error(e?.error?.error || this.translate.instant('register.error'))
     });
   }
 
   badgeClass(active: boolean): string {
     return `text-[11px] font-bold uppercase tracking-wider px-2 py-1 rounded-full border ${active ? 'bg-forest-500/15 text-forest-300 border-forest-500/30' : 'bg-white/5 text-white/40 border-white/10'}`;
+  }
+
+  categoryName(category: CategoryRow): string {
+    return this.translate.currentLang === 'ar' ? category.nameAr : category.nameEn;
+  }
+
+  private fillMissingTranslation(row: CategoryRow): void {
+    row.nameEn = row.nameEn || row.nameAr;
+    row.nameAr = row.nameAr || row.nameEn;
+    row.descriptionEn = row.descriptionEn || row.descriptionAr || '';
+    row.descriptionAr = row.descriptionAr || row.descriptionEn || '';
   }
 }

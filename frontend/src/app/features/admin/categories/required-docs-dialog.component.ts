@@ -38,7 +38,7 @@ interface RequiredDocRow {
           <div>
             <h3 class="text-xl font-bold gradient-text">{{ 'admin.required_docs.title' | translate }}</h3>
             <p class="text-xs text-white/55 mt-1">
-              {{ category.nameEn }} · {{ category.nameAr }}
+              {{ categoryName() }}
             </p>
           </div>
           <button (click)="close.emit()" class="text-white/60 hover:text-white text-2xl px-2 leading-none">×</button>
@@ -51,8 +51,7 @@ interface RequiredDocRow {
             <span class="text-xs text-white/55 w-6 text-center">#{{ d.displayOrder }}</span>
 
             <div class="flex-1 min-w-0">
-              <div class="font-medium text-sm">{{ d.labelEn }}</div>
-              <div class="text-xs text-white/55">{{ d.labelAr }}</div>
+              <div class="font-medium text-sm">{{ documentLabel(d) }}</div>
             </div>
 
             <span [class]="d.mandatory
@@ -85,12 +84,12 @@ interface RequiredDocRow {
             {{ editing.id ? ('admin.required_docs.edit' | translate) : ('admin.required_docs.add' | translate) }}
           </h4>
 
-          <input [(ngModel)]="editing.labelEn" name="labelEn" required
+          <input *ngIf="translate.currentLang !== 'ar'" [(ngModel)]="editing.labelEn" name="labelEn" required
                  [placeholder]="'admin.required_docs.label_en' | translate"
                  class="glass rounded-lg px-3 py-2 text-sm bg-slate-900/40 outline-none
                         focus:ring-2 focus:ring-forest-500/40">
 
-          <input [(ngModel)]="editing.labelAr" name="labelAr" required
+          <input *ngIf="translate.currentLang === 'ar'" [(ngModel)]="editing.labelAr" name="labelAr" required
                  [placeholder]="'admin.required_docs.label_ar' | translate"
                  class="glass rounded-lg px-3 py-2 text-sm bg-slate-900/40 outline-none
                         focus:ring-2 focus:ring-forest-500/40">
@@ -127,7 +126,7 @@ export class RequiredDocsDialogComponent implements OnInit {
 
   private api = inject(ApiService);
   private toastr = inject(ToastrService);
-  private translate = inject(TranslateService);
+  translate = inject(TranslateService);
 
   docs = signal<RequiredDocRow[]>([]);
   loading = signal(false);
@@ -142,12 +141,12 @@ export class RequiredDocsDialogComponent implements OnInit {
     this.api.get<RequiredDocRow[]>(`/admin/catalog/categories/${this.category.id}/required-documents`)
       .subscribe({
         next: list => { this.docs.set(list); this.loading.set(false); },
-        error: e => { this.loading.set(false); this.toastr.error(e?.error?.error || 'Error'); }
+        error: e => { this.loading.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
       });
   }
 
   canSave(): boolean {
-    return !!(this.editing.labelEn && this.editing.labelAr
+    return !!(((this.editing.labelEn || this.editing.labelAr))
               && this.editing.displayOrder !== undefined && this.editing.displayOrder !== null);
   }
 
@@ -162,6 +161,8 @@ export class RequiredDocsDialogComponent implements OnInit {
   save(): void {
     if (!this.canSave()) return;
     this.busy.set(true);
+    this.editing.labelEn = this.editing.labelEn || this.editing.labelAr || '';
+    this.editing.labelAr = this.editing.labelAr || this.editing.labelEn || '';
     const payload = {
       labelEn:      this.editing.labelEn,
       labelAr:      this.editing.labelAr,
@@ -178,7 +179,7 @@ export class RequiredDocsDialogComponent implements OnInit {
         this.resetForm();
         this.fetch();
       },
-      error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || 'Error'); }
+      error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
     });
   }
 
@@ -189,7 +190,7 @@ export class RequiredDocsDialogComponent implements OnInit {
         this.toastr.success(this.translate.instant('admin.required_docs.deleted'));
         this.fetch();
       },
-      error: e => this.toastr.error(e?.error?.error || 'Error')
+      error: e => this.toastr.error(e?.error?.error || this.translate.instant('register.error'))
     });
   }
 
@@ -202,5 +203,13 @@ export class RequiredDocsDialogComponent implements OnInit {
       mandatory: false,
       displayOrder: (this.docs().length || 0) + 1
     };
+  }
+
+  categoryName(): string {
+    return this.translate.currentLang === 'ar' ? this.category.nameAr : this.category.nameEn;
+  }
+
+  documentLabel(document: RequiredDocRow): string {
+    return this.translate.currentLang === 'ar' ? document.labelAr : document.labelEn;
   }
 }

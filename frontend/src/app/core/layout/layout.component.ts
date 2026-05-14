@@ -35,8 +35,8 @@ interface NavItem {
           </svg>
         </div>
         <div class="leading-tight">
-          <div class="text-sm font-bold tracking-wide">Arabic Quality</div>
-          <div class="text-[10px] uppercase tracking-[0.2em] text-white/50">Platform</div>
+          <div class="text-sm font-bold tracking-wide">{{ 'menu.brand' | translate }}</div>
+          <div class="text-[10px] uppercase tracking-[0.2em] text-white/50">{{ 'menu.platform' | translate }}</div>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ interface NavItem {
             <path d="M3 5h12M9 3v2m1.05 12L6 21M21 21l-4-9-4 9M9 7h6a4 4 0 010 8h-4M5 9c0 1.5 2 4 5 6"/>
           </svg>
           <span class="text-sm font-medium">
-            {{ currentLang() === 'ar' ? 'English' : 'العربية' }}
+            {{ 'menu.change_language' | translate }}
           </span>
           <span class="ms-auto text-[10px] uppercase tracking-wider text-white/40">{{ currentLang() }}</span>
         </button>
@@ -113,7 +113,7 @@ interface NavItem {
     <header class="glass-strong md:hidden fixed top-2 left-2 right-2 rounded-2xl z-30 flex items-center justify-between px-4 py-3">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-forest-500 to-royal-700"></div>
-        <span class="text-sm font-semibold">Arabic Quality</span>
+        <span class="text-sm font-semibold">{{ 'menu.brand' | translate }}</span>
       </div>
       <button (click)="mobileOpen.set(!mobileOpen())" class="p-2 rounded-lg hover:bg-white/10">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"

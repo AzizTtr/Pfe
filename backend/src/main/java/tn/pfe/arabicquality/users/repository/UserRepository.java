@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import tn.pfe.arabicquality.users.domain.User;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -18,6 +19,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
     boolean existsByEmail(String email);
+
+    @Query("""
+           SELECT u FROM User u
+            WHERE u.deletedAt IS NULL
+              AND u.active = TRUE
+              AND u.role.code = :roleCode
+            ORDER BY u.fullName ASC
+           """)
+    List<User> findActiveByRoleCode(@Param("roleCode") String roleCode);
 
     @Query("""
            SELECT u FROM User u

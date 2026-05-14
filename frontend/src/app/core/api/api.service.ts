@@ -16,6 +16,13 @@ export class ApiService {
     return this.http.get<T>(`${this.base}${path}`, { params: this.toParams(params) });
   }
 
+  getBlob(path: string, params?: Record<string, string | number | boolean>): Observable<Blob> {
+    return this.http.get(`${this.base}${path}`, {
+      params: this.toParams(params),
+      responseType: 'blob'
+    });
+  }
+
   post<T>(path: string, body: any): Observable<T> {
     return this.http.post<T>(`${this.base}${path}`, body);
   }

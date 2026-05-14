@@ -35,7 +35,7 @@ interface QuestionRow {
       <div class="glass rounded-2xl p-4 flex flex-wrap gap-3">
         <select [(ngModel)]="categoryFilter" (ngModelChange)="fetchQuestions()" class="glass rounded-lg px-3 py-2 text-sm bg-slate-900/40 outline-none">
           <option [ngValue]="null">{{ 'admin.questions.all_categories' | translate }}</option>
-          <option *ngFor="let c of categories()" [ngValue]="c.id">{{ c.code }} · {{ c.nameEn }}</option>
+          <option *ngFor="let c of categories()" [ngValue]="c.id">{{ c.code }} · {{ categoryName(c) }}</option>
         </select>
         <span class="ms-auto text-xs text-white/50">{{ rows().length }} {{ 'admin.questions.total' | translate }}</span>
       </div>
@@ -55,8 +55,7 @@ interface QuestionRow {
           <tbody>
             <tr *ngFor="let q of rows()" class="border-t border-white/5 hover:bg-white/5 transition">
               <td class="px-4 py-3">
-                <div class="font-medium line-clamp-1">{{ q.textEn }}</div>
-                <div class="text-xs text-white/55 line-clamp-1">{{ q.textAr }}</div>
+                <div class="font-medium line-clamp-1">{{ questionText(q) }}</div>
               </td>
               <td class="px-4 py-3 hidden md:table-cell text-white/60">{{ q.categoryCode }}</td>
               <td class="px-4 py-3 hidden lg:table-cell text-white/60">{{ q.displayOrder }}</td>
@@ -83,10 +82,10 @@ interface QuestionRow {
         <form (click)="$event.stopPropagation()" (ngSubmit)="save()" class="glass-strong rounded-2xl max-w-2xl w-full p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-3">
           <h3 class="md:col-span-2 text-xl font-bold gradient-text">{{ editing()!.id ? ('admin.catalog.edit' | translate) : ('admin.catalog.add' | translate) }}</h3>
           <select [(ngModel)]="editing()!.categoryId" name="categoryId" required class="md:col-span-2 glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none">
-            <option *ngFor="let c of categories()" [ngValue]="c.id">{{ c.code }} · {{ c.nameEn }}</option>
+            <option *ngFor="let c of categories()" [ngValue]="c.id">{{ c.code }} · {{ categoryName(c) }}</option>
           </select>
-          <textarea [(ngModel)]="editing()!.textEn" name="textEn" rows="4" required [placeholder]="'admin.questions.text_en' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none resize-none"></textarea>
-          <textarea [(ngModel)]="editing()!.textAr" name="textAr" rows="4" required [placeholder]="'admin.questions.text_ar' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none resize-none"></textarea>
+          <textarea *ngIf="translate.currentLang !== 'ar'" [(ngModel)]="editing()!.textEn" name="textEn" rows="4" required [placeholder]="'admin.questions.text_en' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none resize-none"></textarea>
+          <textarea *ngIf="translate.currentLang === 'ar'" [(ngModel)]="editing()!.textAr" name="textAr" rows="4" required [placeholder]="'admin.questions.text_ar' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none resize-none"></textarea>
           <input [(ngModel)]="editing()!.displayOrder" name="displayOrder" type="number" required [placeholder]="'admin.catalog.order' | translate" class="glass rounded-lg px-3 py-2 bg-slate-900/40 outline-none">
           <label class="text-sm text-white/70 flex items-center gap-2"><input type="checkbox" [(ngModel)]="editing()!.requiresAttachment" name="requiresAttachment"> {{ 'admin.questions.attachment' | translate }}</label>
           <label class="md:col-span-2 text-sm text-white/70 flex items-center gap-2"><input type="checkbox" [(ngModel)]="editing()!.active" name="active"> {{ 'admin.catalog.active' | translate }}</label>
@@ -102,7 +101,7 @@ interface QuestionRow {
 export class QuestionsComponent implements OnInit {
   private api = inject(ApiService);
   private toastr = inject(ToastrService);
-  private translate = inject(TranslateService);
+  translate = inject(TranslateService);
 
   rows = signal<QuestionRow[]>([]);
   categories = signal<CategoryRow[]>([]);
@@ -119,7 +118,7 @@ export class QuestionsComponent implements OnInit {
   fetchCategories(): void {
     this.api.get<CategoryRow[]>('/admin/catalog/categories').subscribe({
       next: rows => this.categories.set(rows),
-      error: e => this.toastr.error(e?.error?.error || 'Error')
+      error: e => this.toastr.error(e?.error?.error || this.translate.instant('register.error'))
     });
   }
 
@@ -128,7 +127,7 @@ export class QuestionsComponent implements OnInit {
     const params = this.categoryFilter ? { categoryId: this.categoryFilter } : undefined;
     this.api.get<QuestionRow[]>('/admin/catalog/questions', params).subscribe({
       next: rows => { this.rows.set(rows); this.loading.set(false); },
-      error: e => { this.loading.set(false); this.toastr.error(e?.error?.error || 'Error'); }
+      error: e => { this.loading.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
     });
   }
 
@@ -143,13 +142,15 @@ export class QuestionsComponent implements OnInit {
 
   save(): void {
     const row = this.editing(); if (!row) return;
+    row.textEn = row.textEn || row.textAr;
+    row.textAr = row.textAr || row.textEn;
     this.busy.set(true);
     const request = row.id
       ? this.api.patch<QuestionRow>(`/admin/catalog/questions/${row.id}`, row)
       : this.api.post<QuestionRow>('/admin/catalog/questions', row);
     request.subscribe({
       next: () => { this.busy.set(false); this.close(); this.fetchQuestions(); this.toastr.success(this.translate.instant('admin.catalog.saved')); },
-      error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || 'Error'); }
+      error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
     });
   }
 
@@ -157,11 +158,19 @@ export class QuestionsComponent implements OnInit {
     const action = row.active ? 'deactivate' : 'reactivate';
     this.api.post<void>(`/admin/catalog/questions/${row.id}/${action}`, {}).subscribe({
       next: () => this.fetchQuestions(),
-      error: e => this.toastr.error(e?.error?.error || 'Error')
+      error: e => this.toastr.error(e?.error?.error || this.translate.instant('register.error'))
     });
   }
 
   badgeClass(active: boolean): string {
     return `text-[11px] font-bold uppercase tracking-wider px-2 py-1 rounded-full border ${active ? 'bg-forest-500/15 text-forest-300 border-forest-500/30' : 'bg-white/5 text-white/40 border-white/10'}`;
+  }
+
+  categoryName(category: CategoryRow): string {
+    return this.translate.currentLang === 'ar' ? category.nameAr : category.nameEn;
+  }
+
+  questionText(question: QuestionRow): string {
+    return this.translate.currentLang === 'ar' ? question.textAr : question.textEn;
   }
 }
