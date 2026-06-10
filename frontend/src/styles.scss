@@ -12,14 +12,28 @@ html, body {
   height: 100%;
   margin: 0;
   background: #060B1A;        /* deeper, more professional than #020617 */
-  color: #ffffff;
+  color: rgba(255,255,255,.92);
   font-family: 'Cairo', 'Inter', system-ui, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 [dir='rtl'] body { font-family: 'Cairo', sans-serif; }
 [dir='ltr'] body { font-family: 'Inter', sans-serif; }
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59,130,246,.45) transparent;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
 
 /* ─────────────────────────────────────────────
    Aurora background — more subtle, more pro
@@ -46,24 +60,31 @@ html, body {
    Glassmorphism — refined
 ───────────────────────────────────────────── */
 .glass {
-  background: rgba(15, 23, 42, 0.55);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 1px 0 0 rgba(255,255,255,0.04) inset, 0 8px 24px -10px rgba(0,0,0,0.4);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.62), rgba(6, 11, 26, 0.52));
+  backdrop-filter: blur(18px) saturate(128%);
+  -webkit-backdrop-filter: blur(18px) saturate(128%);
+  border: 1px solid rgba(255, 255, 255, 0.085);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.045) inset,
+    0 18px 38px -28px rgba(0,0,0,0.72);
 }
 .glass-strong {
-  background: rgba(6, 11, 26, 0.75);
-  backdrop-filter: blur(28px) saturate(160%);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 1px 0 0 rgba(255,255,255,0.04) inset, 0 16px 48px -16px rgba(0,0,0,0.55);
+  background: linear-gradient(180deg, rgba(8, 14, 31, 0.86), rgba(3, 7, 18, 0.78));
+  backdrop-filter: blur(24px) saturate(145%);
+  -webkit-backdrop-filter: blur(24px) saturate(145%);
+  border: 1px solid rgba(255, 255, 255, 0.085);
+  border-radius: 18px;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.045) inset,
+    0 24px 56px -30px rgba(0,0,0,0.78);
 }
 .glass-soft {
-  background: rgba(15, 23, 42, 0.30);
-  backdrop-filter: blur(14px) saturate(130%);
-  -webkit-backdrop-filter: blur(14px) saturate(130%);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(15, 23, 42, 0.36);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.065);
+  border-radius: 14px;
 }
 
 /* ─────────────────────────────────────────────
@@ -82,10 +103,10 @@ html, body {
 ───────────────────────────────────────────── */
 .glow-emerald {
   box-shadow: 0 0 0 0 rgba(16,185,129,0);
-  transition: box-shadow .35s ease, transform .25s ease;
+  transition: box-shadow .22s ease, transform .18s ease, border-color .18s ease;
 }
 .glow-emerald:hover {
-  box-shadow: 0 0 28px rgba(16,185,129,.35), 0 6px 18px -8px rgba(16,185,129,.4);
+  box-shadow: 0 14px 30px -22px rgba(16,185,129,.55);
   transform: translateY(-1px);
 }
 
@@ -95,11 +116,11 @@ html, body {
 .card-rim { position: relative; }
 .card-rim::after {
   content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
-  background: linear-gradient(135deg, rgba(16,185,129,0.45), rgba(59,130,246,0.45));
+  background: linear-gradient(135deg, rgba(16,185,129,0.42), rgba(59,130,246,0.36));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
           mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
-  opacity: 0; transition: opacity .35s ease; pointer-events: none;
+  opacity: 0; transition: opacity .22s ease; pointer-events: none;
 }
 .card-rim:hover::after { opacity: 1; }
 
@@ -108,17 +129,18 @@ html, body {
 ───────────────────────────────────────────── */
 .aq-pill {
   display: inline-flex; align-items: center; gap: .5rem;
+  min-height: 38px;
   padding: .5rem .9rem; border-radius: .625rem;
-  font-size: .8125rem; font-weight: 500;
-  color: rgba(255,255,255,.6);
-  background: rgba(255,255,255,.03);
-  border: 1px solid rgba(255,255,255,.06);
-  transition: all .2s ease;
+  font-size: .8125rem; font-weight: 650;
+  color: rgba(255,255,255,.64);
+  background: rgba(255,255,255,.028);
+  border: 1px solid rgba(255,255,255,.075);
+  transition: color .18s ease, background .18s ease, border-color .18s ease, transform .18s ease;
   white-space: nowrap;
 }
 .aq-pill:hover {
   color: #fff;
-  background: rgba(255,255,255,.06);
+  background: rgba(255,255,255,.055);
   border-color: rgba(255,255,255,.12);
 }
 .aq-pill.aq-pill-active {
@@ -133,10 +155,12 @@ html, body {
 ───────────────────────────────────────────── */
 .aq-badge {
   display: inline-flex; align-items: center; gap: .375rem;
+  min-height: 24px;
   padding: .25rem .625rem; border-radius: 9999px;
-  font-size: .6875rem; font-weight: 700;
+  font-size: .6875rem; font-weight: 800;
   text-transform: uppercase; letter-spacing: .05em;
   border: 1px solid;
+  line-height: 1;
 }
 .aq-badge-success { background: rgba(16,185,129,.12); color: #6ee7b7; border-color: rgba(16,185,129,.30); }
 .aq-badge-info    { background: rgba(59,130,246,.12); color: #93c5fd; border-color: rgba(59,130,246,.30); }
@@ -158,8 +182,8 @@ html, body {
 ───────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(30, 58, 138, .5); border-radius: 5px; border: 2px solid transparent; background-clip: padding-box; }
-::-webkit-scrollbar-thumb:hover { background: rgba(37, 99, 235, .7); background-clip: padding-box; }
+::-webkit-scrollbar-thumb { background: rgba(59,130,246,.42); border-radius: 999px; border: 3px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: rgba(59,130,246,.62); background-clip: padding-box; }
 
 /* ─────────────────────────────────────────────
    Material overrides — dark, refined
@@ -176,16 +200,17 @@ html, body {
 }
 .mat-mdc-form-field .mat-mdc-text-field-wrapper {
   background: rgba(15,23,42,.45);
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: .625rem !important;
+  border: 1px solid rgba(255,255,255,.085);
+  border-radius: .75rem !important;
   backdrop-filter: blur(8px);
-  transition: border-color .2s ease;
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
 }
 .mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
-  border-color: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.14);
 }
 .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
   border-color: rgba(16,185,129,.4);
+  box-shadow: 0 0 0 3px rgba(16,185,129,.10);
 }
 .mat-mdc-input-element { color: #fff !important; caret-color: #10b981 !important; }
 .mat-mdc-form-field-label, .mdc-floating-label { color: rgba(255,255,255,.65) !important; }
@@ -215,15 +240,47 @@ html, body {
    Tables — refined
 ───────────────────────────────────────────── */
 table { border-spacing: 0; }
-th { font-weight: 600; }
+th {
+  font-weight: 750;
+  letter-spacing: .045em;
+}
+
+tbody tr {
+  transition: background .16s ease;
+}
+
+input,
+select,
+textarea {
+  color: rgba(255,255,255,.92);
+  border-color: rgba(255,255,255,.085);
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255,255,255,.38);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(16,185,129,.38) !important;
+  box-shadow: 0 0 0 3px rgba(16,185,129,.10);
+}
+
+button,
+a {
+  transition-duration: .18s;
+}
 
 /* ─────────────────────────────────────────────
    Focus-visible globally
 ───────────────────────────────────────────── */
 :focus-visible {
-  outline: 2px solid rgba(16,185,129,.5);
-  outline-offset: 2px;
-  border-radius: 6px;
+  outline: 2px solid rgba(16,185,129,.46);
+  outline-offset: 3px;
+  border-radius: 8px;
 }
 
 /* ─────────────────────────────────────────────
@@ -232,4 +289,17 @@ th { font-weight: 600; }
 .aq-divider {
   height: 3px; width: 56px; border-radius: 9999px;
   background: linear-gradient(90deg, #10b981, #3b82f6);
+  box-shadow: 0 10px 24px -12px rgba(16,185,129,.65);
+}
+
+.rounded-3xl {
+  border-radius: 1.125rem;
+}
+
+.rounded-2xl {
+  border-radius: 1rem;
+}
+
+.rounded-xl {
+  border-radius: .75rem;
 }

@@ -56,7 +56,7 @@ interface Page<T> {
         </button>
 
         <span class="ms-auto text-xs text-white/50">
-          {{ totalElements() }} {{ 'admin.registrations.total' | translate }}
+          {{ counts()['TOTAL'] || totalElements() }} {{ 'admin.registrations.total' | translate }}
         </span>
       </div>
 
@@ -225,6 +225,7 @@ export class RegistrationsComponent implements OnInit {
     if (status === 'PENDING' || status === 'APPROVED' || status === 'REJECTED') {
       this.status.set(status);
     }
+    this.fetchCounts();
     this.fetch();
   }
 
@@ -237,12 +238,17 @@ export class RegistrationsComponent implements OnInit {
         next: p => {
           this.rows.set(p.content);
           this.totalElements.set(p.totalElements);
-          const c = { ...this.counts() }; c[this.status()] = p.totalElements;
-          this.counts.set(c);
           this.loading.set(false);
         },
         error: e => { this.loading.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
       });
+  }
+
+  fetchCounts(): void {
+    this.api.get<Record<string, number>>('/admin/registrations/counts').subscribe({
+      next: counts => this.counts.set(counts),
+      error: () => this.counts.set({})
+    });
   }
 
   open(r: RegistrationRow): void { this.selected.set(r); this.reason = ''; }
@@ -255,7 +261,7 @@ export class RegistrationsComponent implements OnInit {
       .subscribe({
         next: () => {
           this.toastr.success(this.translate.instant('admin.registrations.approved_ok'));
-          this.busy.set(false); this.close(); this.fetch();
+          this.busy.set(false); this.close(); this.fetchCounts(); this.fetch();
         },
         error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
       });
@@ -268,7 +274,7 @@ export class RegistrationsComponent implements OnInit {
       .subscribe({
         next: () => {
           this.toastr.success(this.translate.instant('admin.registrations.rejected_ok'));
-          this.busy.set(false); this.close(); this.fetch();
+          this.busy.set(false); this.close(); this.fetchCounts(); this.fetch();
         },
         error: e => { this.busy.set(false); this.toastr.error(e?.error?.error || this.translate.instant('register.error')); }
       });

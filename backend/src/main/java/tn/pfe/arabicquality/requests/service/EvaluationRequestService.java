@@ -303,6 +303,8 @@ public class EvaluationRequestService {
                 request.getRequestNumber(),
                 request.getStatus().name(),
                 request.getEntity().getName(),
+                request.getFinalScore(),
+                request.getFinalPercentage(),
                 request.getSubmittedAt(),
                 request.getCreatedAt(),
                 request.getCategories().stream().sorted(Comparator.comparing(EvaluationCategory::getDisplayOrder))

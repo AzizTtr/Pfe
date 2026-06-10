@@ -34,6 +34,11 @@ public class AdminRegistrationController {
         return registrationService.list(status, pageable);
     }
 
+    @GetMapping("/counts")
+    public Map<String, Long> counts() {
+        return registrationService.counts();
+    }
+
     /** Approuve la demande → crée user Keycloak + EducationalEntity + envoie email. */
     @PostMapping("/{id}/approve")
     public ResponseEntity<?> approve(@PathVariable Long id,

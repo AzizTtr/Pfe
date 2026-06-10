@@ -1,0 +1,1 @@
+import"./chunk-CWTPBX7D.js";var t=[{path:"",loadComponent:()=>import("./chunk-BM5GE424.js").then(o=>o.InboxComponent)},{path:":id",loadComponent:()=>import("./chunk-L26KIN5D.js").then(o=>o.ReviewComponent)}];export{t as evaluationRoutes};

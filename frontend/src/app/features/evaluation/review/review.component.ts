@@ -34,6 +34,23 @@ interface WorkflowDetail {
   assignments: any[];
   decisions: any[];
 }
+interface AiSuggestion {
+  answerId: number;
+  question: string;
+  suggestedValueCode: string;
+  confidence: string;
+  reason: string;
+  suggestedNote: string;
+}
+interface AiEvaluationAssistant {
+  overview: string;
+  suggestions: AiSuggestion[];
+  riskAlerts: string[];
+  fraudRiskAlerts: string[];
+  fraudRiskScore: number;
+  recommendedDecision: 'APPROVED' | 'REJECTED' | 'REQUEST_INFO';
+  decisionNote: string;
+}
 
 @Component({
   selector: 'aq-review',
@@ -53,6 +70,9 @@ interface WorkflowDetail {
             <div class="mt-2 aq-badge" [ngClass]="badge(d.request.status)">{{ statusLabel(d.request.status) | translate }}</div>
           </div>
           <div class="flex flex-wrap gap-2">
+            <button type="button" class="px-4 py-2 rounded-xl bg-blue-500/20 hover:bg-blue-500/30 text-blue-100 font-semibold" (click)="loadAiAssistant()">
+              {{ 'ai.evaluation.action' | translate }}
+            </button>
             <button type="button" class="px-4 py-2 rounded-xl bg-forest-600 hover:bg-forest-500 font-semibold" (click)="decide('APPROVED')">
               {{ 'evaluation.review.approve' | translate }}
             </button>
@@ -95,6 +115,32 @@ interface WorkflowDetail {
           </div>
 
           <aside class="space-y-4">
+            <div class="glass rounded-2xl p-4 border border-blue-400/20" *ngIf="aiAssistant() as ai">
+              <div class="flex items-center justify-between gap-3 mb-3">
+                <h3 class="font-bold gradient-text">{{ 'ai.evaluation.title' | translate }}</h3>
+                <span class="aq-badge aq-badge-info">{{ ai.recommendedDecision }}</span>
+              </div>
+              <p class="text-sm text-white/60 leading-relaxed">{{ ai.overview }}</p>
+              <div class="mt-4 rounded-xl border border-red-400/20 bg-red-500/[0.05] p-3" *ngIf="ai.fraudRiskAlerts?.length">
+                <div class="flex items-center justify-between gap-3">
+                  <div class="text-xs uppercase tracking-wider text-red-200">{{ 'ai.evaluation.fraud_risks' | translate }}</div>
+                  <span class="aq-badge aq-badge-danger">{{ ai.fraudRiskScore }}%</span>
+                </div>
+                <ul class="mt-2 space-y-2 text-sm text-white/65">
+                  <li *ngFor="let alert of ai.fraudRiskAlerts">{{ alert }}</li>
+                </ul>
+              </div>
+              <div class="mt-4">
+                <div class="text-xs uppercase tracking-wider text-white/45 mb-2">{{ 'ai.evaluation.risks' | translate }}</div>
+                <ul class="space-y-2 text-sm text-white/65">
+                  <li *ngFor="let alert of ai.riskAlerts" class="rounded-xl border border-white/10 bg-white/[0.03] p-3">{{ alert }}</li>
+                </ul>
+              </div>
+              <button type="button" class="mt-4 w-full rounded-xl bg-white/5 px-3 py-2 text-sm font-semibold hover:bg-white/10" (click)="applyAiDecision(ai)">
+                {{ 'ai.evaluation.apply_decision' | translate }}
+              </button>
+            </div>
+
             <div class="glass rounded-2xl p-4">
               <h3 class="font-bold mb-3">{{ 'evaluation.review.attachments' | translate }}</h3>
               <div *ngIf="d.request.attachments.length === 0" class="text-sm text-white/50">{{ 'entity.detail.no_attachments' | translate }}</div>
@@ -120,6 +166,23 @@ interface WorkflowDetail {
             </div>
           </aside>
         </div>
+
+        <div class="glass rounded-2xl p-5 mt-4 border border-blue-400/20" *ngIf="aiAssistant() as ai">
+          <h3 class="font-bold mb-4 gradient-text">{{ 'ai.evaluation.suggestions' | translate }}</h3>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            <div *ngFor="let item of ai.suggestions" class="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+              <div class="flex items-start justify-between gap-3">
+                <div class="text-sm font-semibold">{{ item.question }}</div>
+                <span class="aq-badge aq-badge-success">{{ item.suggestedValueCode }}</span>
+              </div>
+              <div class="mt-2 text-xs text-white/45">{{ item.confidence }}</div>
+              <p class="mt-2 text-sm text-white/60">{{ item.reason }}</p>
+              <button type="button" class="mt-3 rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold hover:bg-white/10" (click)="applySuggestion(item)">
+                {{ 'ai.evaluation.apply_rating' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
       </ng-container>
     </aq-page-shell>
   `
@@ -132,7 +195,9 @@ export class ReviewComponent implements OnInit {
   private t = inject(TranslateService);
 
   data = signal<WorkflowDetail | null>(null);
+  aiAssistant = signal<AiEvaluationAssistant | null>(null);
   loading = signal(false);
+  aiLoading = signal(false);
   decisionNotes = '';
   id = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -147,12 +212,35 @@ export class ReviewComponent implements OnInit {
         data.request.answers.forEach(answer => answer.finalValueId = answer.finalValueId || answer.valueId);
         this.data.set(data);
         this.loading.set(false);
+        this.loadAiAssistant();
       },
       error: err => {
         this.loading.set(false);
         this.toastr.error(err?.error?.error || 'Unable to load request');
       }
     });
+  }
+
+  loadAiAssistant(): void {
+    this.aiLoading.set(true);
+    this.api.get<AiEvaluationAssistant>(`/evaluation/requests/${this.id}/ai-assistant`).subscribe({
+      next: ai => { this.aiAssistant.set(ai); this.aiLoading.set(false); },
+      error: () => this.aiLoading.set(false)
+    });
+  }
+
+  applyAiDecision(ai: AiEvaluationAssistant): void {
+    this.decisionNotes = ai.decisionNote;
+  }
+
+  applySuggestion(item: AiSuggestion): void {
+    const current = this.data();
+    if (!current) return;
+    const answer = current.request.answers.find(row => row.id === item.answerId);
+    const value = current.values.find(row => row.code === item.suggestedValueCode);
+    if (!answer || !value) return;
+    answer.finalValueId = value.id;
+    answer.evaluatorNote = item.suggestedNote;
   }
 
   saveAnswer(answer: AnswerDto): void {

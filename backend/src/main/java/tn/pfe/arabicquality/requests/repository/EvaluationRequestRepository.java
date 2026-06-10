@@ -1,6 +1,8 @@
 package tn.pfe.arabicquality.requests.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import tn.pfe.arabicquality.requests.domain.EvaluationRequest;
 import tn.pfe.arabicquality.requests.domain.RequestStatus;
 
@@ -12,4 +14,14 @@ public interface EvaluationRequestRepository extends JpaRepository<EvaluationReq
     List<EvaluationRequest> findBySubmittedByIdOrderByCreatedAtDesc(Long submittedById);
     List<EvaluationRequest> findAllByOrderByUpdatedAtDesc();
     Optional<EvaluationRequest> findByIdAndSubmittedById(Long id, Long submittedById);
+
+    @Query("""
+            select request
+              from EvaluationRequest request
+              join fetch request.entity entity
+             where request.status = :status
+               and request.finalPercentage is not null
+               and entity.active = true
+            """)
+    List<EvaluationRequest> findScoredRequestsWithEntity(@Param("status") RequestStatus status);
 }

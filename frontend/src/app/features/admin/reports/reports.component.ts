@@ -57,6 +57,12 @@ interface ReportsDashboardDto {
   valueScale: ValueScaleDto[];
   recentRegistrations: RecentRegistrationDto[];
 }
+interface AiDashboardInsights {
+  summary: string;
+  highlights: string[];
+  risks: string[];
+  recommendations: string[];
+}
 
 /** Features 21 + 22 - live analytics from platform resources. */
 @Component({
@@ -88,6 +94,39 @@ interface ReportsDashboardDto {
       </div>
 
       <ng-container *ngIf="!loading() && dashboard() as data">
+        <div class="glass rounded-2xl p-5 border border-blue-400/20" *ngIf="aiInsights() as ai">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <div class="text-xs uppercase tracking-wider text-blue-200/70">{{ 'ai.dashboard.badge' | translate }}</div>
+              <h3 class="mt-1 text-lg font-bold gradient-text">{{ 'ai.dashboard.title' | translate }}</h3>
+              <p class="mt-2 text-sm text-white/60">{{ ai.summary }}</p>
+            </div>
+            <button type="button" class="rounded-xl bg-white/5 px-3 py-2 text-xs font-semibold hover:bg-white/10" (click)="fetchAiInsights()">
+              {{ 'admin.reports.refresh' | translate }}
+            </button>
+          </div>
+          <div class="mt-5 grid grid-cols-1 lg:grid-cols-3 gap-3">
+            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+              <h4 class="text-sm font-bold text-forest-200">{{ 'ai.dashboard.highlights' | translate }}</h4>
+              <ul class="mt-3 space-y-2 text-sm text-white/60">
+                <li *ngFor="let item of ai.highlights">{{ item }}</li>
+              </ul>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+              <h4 class="text-sm font-bold text-amber-200">{{ 'ai.dashboard.risks' | translate }}</h4>
+              <ul class="mt-3 space-y-2 text-sm text-white/60">
+                <li *ngFor="let item of ai.risks">{{ item }}</li>
+              </ul>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+              <h4 class="text-sm font-bold text-blue-200">{{ 'ai.dashboard.recommendations' | translate }}</h4>
+              <ul class="mt-3 space-y-2 text-sm text-white/60">
+                <li *ngFor="let item of ai.recommendations">{{ item }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
         <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
           <div *ngFor="let k of data.kpis" class="glass rounded-xl p-4 min-h-[94px]">
             <div class="text-[10px] uppercase tracking-wider text-white/50 mb-2">{{ kpiLabel(k) }}</div>
@@ -226,6 +265,7 @@ export class ReportsComponent implements OnInit {
   loading = signal(false);
   exporting = signal(false);
   dashboard = signal<ReportsDashboardDto | null>(null);
+  aiInsights = signal<AiDashboardInsights | null>(null);
 
   registrationChart: ChartConfiguration<'doughnut'>['data'] = { labels: [], datasets: [] };
   catalogChart: ChartConfiguration<'bar'>['data'] = { labels: [], datasets: [] };
@@ -261,11 +301,19 @@ export class ReportsComponent implements OnInit {
         this.dashboard.set(data);
         this.rebuildCharts(data);
         this.loading.set(false);
+        this.fetchAiInsights();
       },
       error: e => {
         this.loading.set(false);
         this.toastr.error(e?.error?.error || this.translate.instant('register.error'));
       }
+    });
+  }
+
+  fetchAiInsights(): void {
+    this.api.get<AiDashboardInsights>('/admin/reports/ai-insights').subscribe({
+      next: insights => this.aiInsights.set(insights),
+      error: () => this.aiInsights.set(null)
     });
   }
 

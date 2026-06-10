@@ -53,7 +53,9 @@ public class UserSyncService {
         Role role = roleRepository.findByCode(roleCode)
                 .orElseThrow(() -> new IllegalStateException("Role inconnu : " + roleCode));
 
-        User user = userRepository.findByKcId(kcId).orElse(null);
+        User user = userRepository.findByKcId(kcId)
+                .or(() -> userRepository.findByEmail(email))
+                .orElse(null);
         if (user == null) {
             user = User.builder()
                     .kcId(kcId)
@@ -68,6 +70,7 @@ public class UserSyncService {
             log.info("Created local profile for kcId={} email={}", kcId, email);
         } else {
             boolean changed = false;
+            if (!Objects.equals(user.getKcId(), kcId)) { user.setKcId(kcId); changed = true; }
             if (!Objects.equals(user.getEmail(), email)) { user.setEmail(email); changed = true; }
             if (!Objects.equals(user.getFullName(), fullName)) { user.setFullName(fullName); changed = true; }
             if (!Objects.equals(user.getRole().getCode(), roleCode)) { user.setRole(role); changed = true; }

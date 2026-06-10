@@ -1,11 +1,15 @@
 package tn.pfe.arabicquality.requests.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tn.pfe.arabicquality.audit.Audit;
 import tn.pfe.arabicquality.catalog.domain.EvaluationValue;
 import tn.pfe.arabicquality.catalog.repository.EvaluationValueRepository;
+import tn.pfe.arabicquality.notifications.EmailService;
+import tn.pfe.arabicquality.notifications.Notification;
+import tn.pfe.arabicquality.notifications.NotificationRepository;
 import tn.pfe.arabicquality.requests.domain.*;
 import tn.pfe.arabicquality.requests.dto.RequestDtos;
 import tn.pfe.arabicquality.requests.repository.EvaluationAnswerRepository;
@@ -32,6 +36,9 @@ public class EvaluationWorkflowService {
     private final UserRepository userRepository;
     private final EvaluationRequestService requestService;
     private final ScoringService scoringService;
+    private final EmailService emailService;
+    private final NotificationRepository notificationRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Transactional(readOnly = true)
     public List<RequestDtos.SummaryDto> inbox(String kcId, String status) {
@@ -119,8 +126,51 @@ public class EvaluationWorkflowService {
         if (next == RequestStatus.COMPLETED) {
             request.setLocked(true);
             requestRepository.save(request);
-            scoringService.calculate(request.getId());
+            ScoringService.ScoreResult score = scoringService.calculate(request.getId());
+            notifyOwner(request,
+                    "REPORT_READY",
+                    "التقرير النهائي جاهز",
+                    "Final report is ready",
+                    "تم إصدار التقرير النهائي ويمكنك تحميله من صفحة الطلب.",
+                    "The final report has been issued and is ready to download.",
+                    true);
+            try {
+                emailService.sendEvaluationCompleted(
+                        request.getSubmittedBy().getEmail(),
+                        request.getSubmittedBy().getFullName(),
+                        request.getRequestNumber(),
+                        score.gradeId() == null ? "-" : String.valueOf(score.gradeId()),
+                        score.percentage().toPlainString(),
+                        "/my-requests/" + request.getId());
+            } catch (Exception ignored) {
+                // Email is non-blocking; the completed workflow must remain committed.
+            }
             return workflowDetail(requestId);
+        }
+        if (next == RequestStatus.INFO_REQUESTED) {
+            notifyOwner(request,
+                    "INFO_REQUESTED",
+                    "مطلوب معلومات إضافية",
+                    "Additional information requested",
+                    "يرجى مراجعة الطلب وإضافة المعلومات المطلوبة.",
+                    "Please review the request and add the requested information.",
+                    true);
+        } else if (next.name().startsWith("REJECTED")) {
+            notifyOwner(request,
+                    "REQUEST_REJECTED",
+                    "تم رفض الطلب",
+                    "Request rejected",
+                    "تم رفض طلب التقييم. راجع ملاحظات القرار.",
+                    "The evaluation request was rejected. Review the decision notes.",
+                    false);
+        } else if (next.name().startsWith("PENDING") || next.name().startsWith("APPROVED")) {
+            notifyOwner(request,
+                    "REQUEST_STATUS_CHANGED",
+                    "تم تحديث حالة الطلب",
+                    "Request status updated",
+                    "تم تحديث حالة طلب التقييم الخاص بك.",
+                    "Your evaluation request status has been updated.",
+                    false);
         }
         requestRepository.save(request);
         return workflowDetail(requestId);
@@ -234,6 +284,26 @@ public class EvaluationWorkflowService {
         if (!valid) {
             throw new IllegalArgumentException("Selected user role does not match assignment stage");
         }
+    }
+
+    private void notifyOwner(EvaluationRequest request, String eventType, String titleAr, String titleEn,
+                             String messageAr, String messageEn, boolean sentViaEmail) {
+        Notification notification = notificationRepository.save(Notification.builder()
+                .user(request.getSubmittedBy())
+                .eventType(eventType)
+                .titleAr(titleAr)
+                .titleEn(titleEn)
+                .messageAr(messageAr)
+                .messageEn(messageEn)
+                .relatedEntity("evaluation_request")
+                .relatedId(request.getId())
+                .linkUrl("/my-requests/" + request.getId())
+                .read(false)
+                .sentViaEmail(sentViaEmail)
+                .build());
+        messagingTemplate.convertAndSend(
+                "/topic/notifications/" + request.getSubmittedBy().getId(),
+                Map.of("id", notification.getId(), "eventType", eventType, "titleEn", titleEn, "titleAr", titleAr));
     }
 
     private User currentUser(String kcId) {

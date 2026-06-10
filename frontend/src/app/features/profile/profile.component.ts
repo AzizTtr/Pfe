@@ -151,7 +151,7 @@ interface UserProfile {
 
               <label class="block">
                 <span class="text-xs text-white/60 mb-2 block">{{ 'profile.timezone' | translate }}</span>
-                <select formControlName="timezone" class="profile-input">
+                <select formControlName="timezone" class="profile-input" [attr.dir]="uiLang() === 'ar' ? 'rtl' : 'ltr'">
                   <option *ngFor="let zone of timezones" [value]="zone.value">{{ timezoneLabel(zone) }}</option>
                 </select>
               </label>
@@ -324,12 +324,12 @@ export class ProfileComponent implements OnInit {
 
   avatarColors = ['#0f766e', '#1d4ed8', '#7c3aed', '#be123c', '#c2410c', '#334155'];
   timezones = [
-    { value: 'Africa/Tunis', labelEn: 'Tunisia - Africa/Tunis', labelAr: '???? - ???????/????' },
-    { value: 'Africa/Casablanca', labelEn: 'Morocco - Africa/Casablanca', labelAr: '?????? - ???????/????? ???????' },
-    { value: 'Africa/Algiers', labelEn: 'Algeria - Africa/Algiers', labelAr: '??????? - ???????/???????' },
-    { value: 'Asia/Riyadh', labelEn: 'Saudi Arabia - Asia/Riyadh', labelAr: '???????? - ????/??????' },
-    { value: 'Europe/Paris', labelEn: 'France - Europe/Paris', labelAr: '????? - ??????/?????' },
-    { value: 'UTC', labelEn: 'UTC', labelAr: '??????? ???????' }
+    { value: 'Africa/Tunis', labelEn: 'Tunisia - Africa/Tunis', labelAr: 'تونس - إفريقيا/تونس' },
+    { value: 'Africa/Casablanca', labelEn: 'Morocco - Africa/Casablanca', labelAr: 'المغرب - إفريقيا/الدار البيضاء' },
+    { value: 'Africa/Algiers', labelEn: 'Algeria - Africa/Algiers', labelAr: 'الجزائر - إفريقيا/الجزائر' },
+    { value: 'Asia/Riyadh', labelEn: 'Saudi Arabia - Asia/Riyadh', labelAr: 'السعودية - آسيا/الرياض' },
+    { value: 'Europe/Paris', labelEn: 'France - Europe/Paris', labelAr: 'فرنسا - أوروبا/باريس' },
+    { value: 'UTC', labelEn: 'UTC', labelAr: 'التوقيت العالمي' }
   ];
 
   form = this.fb.group({
@@ -375,7 +375,7 @@ export class ProfileComponent implements OnInit {
   }
 
   displayName(): string {
-    return this.form.value.fullName || this.profile()?.fullName || 'Your profile';
+    return this.form.value.fullName || this.profile()?.fullName || this.translate.instant('profile.default_name');
   }
 
   shortRole(): string {
@@ -400,7 +400,11 @@ export class ProfileComponent implements OnInit {
   }
 
   timezoneLabel(zone: { labelEn: string; labelAr: string }): string {
-    return this.lang() === 'ar' ? zone.labelAr : zone.labelEn;
+    return this.uiLang() === 'ar' ? zone.labelAr : zone.labelEn;
+  }
+
+  uiLang(): 'ar' | 'en' {
+    return (this.translate.currentLang || document.documentElement.lang || 'en') === 'ar' ? 'ar' : 'en';
   }
 
   bioLength(): number {

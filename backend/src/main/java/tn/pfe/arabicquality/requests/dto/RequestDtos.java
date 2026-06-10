@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class RequestDtos {
@@ -88,6 +89,8 @@ public class RequestDtos {
         private String requestNumber;
         private String status;
         private String entityName;
+        private BigDecimal finalScore;
+        private BigDecimal finalPercentage;
         private LocalDateTime submittedAt;
         private LocalDateTime createdAt;
         private List<CategoryDto> categories;

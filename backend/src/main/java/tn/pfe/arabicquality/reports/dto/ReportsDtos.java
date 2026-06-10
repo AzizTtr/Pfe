@@ -66,4 +66,15 @@ public class ReportsDtos {
         private String status;
         private LocalDateTime createdAt;
     }
+
+    @Data @NoArgsConstructor @AllArgsConstructor
+    public static class InstitutionLeaderboardDto {
+        private int rank;
+        private String entityName;
+        private String city;
+        private String country;
+        private BigDecimal averagePercentage;
+        private BigDecimal bestPercentage;
+        private long completedRequests;
+    }
 }

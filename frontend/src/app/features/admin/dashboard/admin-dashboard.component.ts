@@ -39,7 +39,7 @@ interface Page<T> {
         <a *ngFor="let card of cards"
            [routerLink]="['/admin/registrations']"
            [queryParams]="{ status: card.status }"
-           class="glass rounded-2xl p-4 hover:bg-white/10 transition">
+           class="admin-dashboard-card p-4">
           <div class="text-[10px] uppercase tracking-wider text-white/50 mb-2">
             {{ card.labelKey | translate }}
           </div>
@@ -53,14 +53,14 @@ interface Page<T> {
         </a>
       </div>
 
-      <div class="glass rounded-2xl overflow-hidden">
+      <div class="admin-dashboard-panel overflow-hidden">
         <div class="px-4 py-3 border-b border-white/5 flex items-center justify-between gap-3">
           <div>
             <h3 class="text-sm font-semibold">{{ 'admin.dashboard.pending_title' | translate }}</h3>
             <p class="text-xs text-white/50">{{ 'admin.dashboard.pending_subtitle' | translate }}</p>
           </div>
           <a routerLink="/admin/registrations"
-             class="text-xs px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 transition">
+             class="admin-dashboard-button text-xs px-3 py-1.5">
             {{ 'admin.dashboard.view_all' | translate }}
           </a>
         </div>
@@ -81,7 +81,7 @@ interface Page<T> {
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let r of pendingRows()" class="border-t border-white/5 hover:bg-white/5 transition">
+            <tr *ngFor="let r of pendingRows()" class="border-t border-white/5 hover:bg-white/[0.035] transition">
               <td class="px-4 py-3 text-white/50">#{{ r.id }}</td>
               <td class="px-4 py-3">
                 <div class="font-medium">{{ r.entityName }}</div>
@@ -94,7 +94,7 @@ interface Page<T> {
               <td class="px-4 py-3 text-white/60 text-xs">{{ r.createdAt | date:'short' }}</td>
               <td class="px-4 py-3 text-end">
                 <a [routerLink]="['/admin/registrations']"
-                   class="text-xs px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 transition">
+                   class="admin-dashboard-button text-xs px-3 py-1.5">
                   {{ 'admin.registrations.review' | translate }}
                 </a>
               </td>
@@ -113,7 +113,41 @@ interface Page<T> {
         </table>
       </div>
     </aq-page-shell>
-  `
+  `,
+  styles: [`
+    .admin-dashboard-card,
+    .admin-dashboard-panel {
+      border: 1px solid rgba(255,255,255,.085);
+      background: linear-gradient(180deg, rgba(15,23,42,.58), rgba(6,11,26,.48));
+      border-radius: 1rem;
+      box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 18px 42px -34px rgba(0,0,0,.85);
+    }
+
+    .admin-dashboard-card {
+      min-height: 112px;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+
+    .admin-dashboard-card:hover {
+      transform: translateY(-1px);
+      border-color: rgba(16,185,129,.24);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.032));
+      box-shadow: 0 1px 0 rgba(255,255,255,.045) inset, 0 18px 34px -30px rgba(16,185,129,.45);
+    }
+
+    .admin-dashboard-button {
+      border-radius: .75rem;
+      border: 1px solid rgba(255,255,255,.075);
+      background: rgba(255,255,255,.042);
+      transition: background .18s ease, border-color .18s ease, color .18s ease;
+    }
+
+    .admin-dashboard-button:hover {
+      border-color: rgba(16,185,129,.22);
+      background: rgba(255,255,255,.072);
+      color: #fff;
+    }
+  `]
 })
 export class AdminDashboardComponent implements OnInit {
   private api = inject(ApiService);

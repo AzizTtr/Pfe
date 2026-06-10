@@ -3,11 +3,15 @@ package tn.pfe.arabicquality.requests.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tn.pfe.arabicquality.reports.service.RequestReportService;
 import tn.pfe.arabicquality.requests.dto.RequestDtos;
 import tn.pfe.arabicquality.requests.service.EvaluationRequestService;
 
@@ -22,6 +26,7 @@ import java.util.NoSuchElementException;
 public class EvaluationRequestController {
 
     private final EvaluationRequestService service;
+    private final RequestReportService requestReportService;
 
     @GetMapping("/catalog")
     public RequestDtos.CatalogDto catalog() {
@@ -92,6 +97,22 @@ public class EvaluationRequestController {
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         } catch (IllegalArgumentException | IllegalStateException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/{id}/report/pdf")
+    public ResponseEntity<?> finalReport(@AuthenticationPrincipal Jwt jwt, @PathVariable Long id) {
+        try {
+            byte[] content = requestReportService.exportForOwner(jwt.getSubject(), id);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            ContentDisposition.attachment().filename("evaluation-report-" + id + ".pdf").build().toString())
+                    .body(content);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }

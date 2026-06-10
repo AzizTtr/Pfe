@@ -22,6 +22,8 @@ import tn.pfe.arabicquality.users.repository.UserRepository;
 import tn.pfe.arabicquality.users.service.KeycloakAdminService;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
@@ -84,6 +86,16 @@ public class RegistrationService {
                 ? regRepo.findByStatusOrderByCreatedAtDesc(status, pageable)
                 : regRepo.findAll(pageable);
         return page.map(this::toAdminView);
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Long> counts() {
+        Map<String, Long> counts = new LinkedHashMap<>();
+        for (RegistrationRequest.Status status : RegistrationRequest.Status.values()) {
+            counts.put(status.name(), regRepo.countByStatus(status));
+        }
+        counts.put("TOTAL", counts.values().stream().mapToLong(Long::longValue).sum());
+        return counts;
     }
 
     // ─────────────────────────────────────────────────────────────────

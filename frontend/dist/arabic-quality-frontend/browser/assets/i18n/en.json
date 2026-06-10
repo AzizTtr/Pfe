@@ -69,6 +69,17 @@
         "t": "Status & Info",
         "d": "Notifications, audit log, badges"
       }
+    },
+    "leaderboard": {
+      "title": "Top 10 institutions",
+      "subtitle": "A live ranking of the best institutions based on completed evaluation results from your database.",
+      "live": "Live ranking",
+      "rank": "Rank",
+      "institution": "Institution",
+      "average": "Average score",
+      "best": "Best result",
+      "completed": "Completed",
+      "empty": "The leaderboard will appear after completed evaluations are available."
     }
   },
   "register": {
@@ -122,7 +133,79 @@
       "reports": {
         "t": "Reports",
         "d": "Statistics and analytics"
+      },
+      "admin_dashboard": {
+        "t": "Admin dashboard",
+        "d": "Open the pending registration board"
       }
+    },
+    "common": {
+      "organization": "Organization",
+      "profile": "Profile",
+      "customize": "Customize",
+      "not_set": "Not set",
+      "live_updates": "Live updates",
+      "live_updates_desc": "Recent notifications from your workspace"
+    },
+    "admin_home": {
+      "title": "Admin home",
+      "subtitle": "A live command center for registrations, catalog resources, users, and evaluation flow",
+      "badge": "Platform administration",
+      "greeting": "Welcome,",
+      "hero": "Watch the platform pulse from one place: review institutions, keep the catalog healthy, assign work, and export the reports your project needs.",
+      "pending": "Pending registrations",
+      "requests": "Evaluation requests",
+      "users": "Active users",
+      "catalog": "Catalog questions",
+      "workflow": "Registration workflow",
+      "catalog_health": "Catalog health",
+      "catalog_health_desc": "Live categories and question resources extracted from your database.",
+      "audit_title": "Audit trail",
+      "audit_desc": "Trace important actions and security-sensitive changes.",
+      "assign_title": "Assignments",
+      "assign_desc": "Send requests to evaluators, admin reviewers, or field reviewers.",
+      "export_title": "Exports",
+      "export_desc": "Download live PDF and Excel reports from the reports page."
+    },
+    "entity_home": {
+      "title": "Institution home",
+      "subtitle": "Your workspace for preparing, submitting, and tracking evaluation requests",
+      "badge": "Institution workspace",
+      "greeting": "Hello,",
+      "hero": "Start new evaluations, follow every request stage, and keep your documents ready before the review team needs them.",
+      "total": "Total requests",
+      "total_desc": "All requests created by your institution",
+      "draft_desc": "Saved but not submitted yet",
+      "active": "In progress",
+      "active_desc": "Currently moving through review",
+      "completed_desc": "Approved or completed requests",
+      "recent_requests": "Recent requests",
+      "empty_title": "No requests yet",
+      "empty_desc": "Create your first evaluation request and the progress board will fill with live data.",
+      "process": "Evaluation path",
+      "step_prepare": "Prepare resources",
+      "step_prepare_desc": "Collect documents and answer simple category questions.",
+      "step_submit": "Submit request",
+      "step_submit_desc": "Send the completed form to the evaluation team.",
+      "step_review": "Follow review",
+      "step_review_desc": "Track pending, admin, field, and information-request stages.",
+      "step_report": "Download result",
+      "step_report_desc": "When the workflow is complete, download the official report."
+    },
+    "reviewer_home": {
+      "title": "Reviewer home",
+      "subtitle": "A focused inbox for requests assigned to the evaluation team",
+      "badge": "Review workspace",
+      "greeting": "Ready,",
+      "hero": "Open assigned requests, check answers and attachments, leave clear notes, and move each request to the next stage.",
+      "queue": "Assigned queue",
+      "focus": "Review focus",
+      "focus_consistency": "Consistent scoring",
+      "focus_consistency_desc": "Use the A/B/C/D scale carefully across comparable answers.",
+      "focus_notes": "Clear notes",
+      "focus_notes_desc": "Write short notes that explain the reason behind each decision.",
+      "focus_timing": "Fast handoff",
+      "focus_timing_desc": "Approve, reject, or request information so the workflow keeps moving."
     }
   },
   "comingSoon": {
@@ -244,7 +327,13 @@
       "answers": "Answers",
       "categories": "Categories",
       "attachments": "Attachments",
-      "no_attachments": "No attachments."
+      "no_attachments": "No attachments.",
+      "final_result": "Final result",
+      "final_result_desc": "The evaluation is complete and the official report is ready to download.",
+      "download_report": "Download report",
+      "final_score": "Final score",
+      "final_percentage": "Final percentage",
+      "report_failed": "Report download failed"
     }
   },
   "evaluation": {
@@ -392,7 +481,8 @@
       "it1": "CRUD for categories (add, edit, delete)",
       "it2": "Bilingual labels and descriptions (AR / EN)",
       "it3": "Manage required attachments per category",
-      "it4": "Order categories by priority"
+      "it4": "Order categories by priority",
+      "docs_count": "Documents"
     },
     "questions": {
       "title": "Questions",
@@ -445,13 +535,24 @@
     },
     "audit": {
       "title": "Audit log",
-      "subtitle": "Trace every system action",
-      "aop_note": "AOP infrastructure is active and logs every sensitive operation. The visualization UI is coming in Sprint 7.",
-      "it1": "Timeline of all operations (create, update, delete, login)",
-      "it2": "Advanced filtering by user, type, date",
-      "it3": "Export logs in multiple formats (JSON / CSV)",
-      "it4": "Link events to trace a specific request",
-      "aop_active": "AOP active"
+      "subtitle": "Trace sensitive operations across the platform",
+      "action": "Action",
+      "user": "User",
+      "entity": "Entity",
+      "description": "Description",
+      "result": "Result",
+      "filter": "Filter",
+      "success": "Success",
+      "failed": "Failed",
+      "empty": "No audit rows found",
+      "aop_note": "AOP audit logging is active for sensitive operations.",
+      "aop_active": "Audit active",
+      "from_date": "From date",
+      "to_date": "To date",
+      "range_today": "Today",
+      "range_week": "Last 7 days",
+      "range_month": "Last 30 days",
+      "clear_dates": "Clear dates"
     },
     "reports": {
       "title": "Advanced reports",
@@ -490,7 +591,8 @@
   "common": {
     "back": "Back",
     "open": "Open",
-    "bytes": "bytes"
+    "bytes": "bytes",
+    "close": "Close"
   },
   "roles": {
     "Platform Administrators": "Platform Administrators",
@@ -529,5 +631,183 @@
   "sprints": {
     "sprint5_m7": "Sprint 5 (M7)",
     "sprint7_m7": "Sprint 7 (M7)"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "mark_all": "Mark all read",
+    "empty": "No notifications"
+  },
+  "ai": {
+    "report": {
+      "badge": "AI report generator",
+      "refresh": "Refresh AI report",
+      "strengths": "Strengths",
+      "weaknesses": "Weaknesses",
+      "recommendations": "Recommendations",
+      "fraud_risks": "AI fraud / risk detection"
+    },
+    "evaluation": {
+      "action": "AI assist",
+      "title": "AI Evaluation Assistant",
+      "risks": "Risk alerts",
+      "suggestions": "Suggested ratings",
+      "apply_decision": "Use decision note",
+      "apply_rating": "Apply suggestion",
+      "fraud_risks": "Fraud / risk detection"
+    },
+    "dashboard": {
+      "badge": "AI dashboard insights",
+      "title": "Smart platform insights",
+      "highlights": "Highlights",
+      "risks": "Risks",
+      "recommendations": "Recommendations"
+    },
+    "chat": {
+      "title": "AQL AI Co-Pilot",
+      "welcome": "Hi, I am your Arabic Quality AI co-pilot. Try: “summarize this request”, “show risks”, “suggest decision note”, or “what should I do next?”",
+      "placeholder": "Ask the AI co-pilot...",
+      "context_general": "Smart help for the platform",
+      "context_reports": "Reading admin report insights",
+      "context_review": "Assisting this evaluation review",
+      "context_request": "Summarizing this request",
+      "context_profile": "Helping with account settings",
+      "prompt_login": "How do I sign in?",
+      "prompt_register": "How to register?",
+      "prompt_insights": "Summarize insights",
+      "prompt_risks": "Show risks",
+      "prompt_next": "What should I do next?",
+      "prompt_eval": "Suggest evaluation help",
+      "prompt_decision": "Suggest decision note",
+      "prompt_report": "Generate request summary",
+      "prompt_strengths": "Show strengths",
+      "prompt_help": "Help me navigate",
+      "prompt_status": "Explain statuses",
+      "prompt_features": "What AI can do?",
+      "answer_strengths": "Main strengths:",
+      "answer_next": "Recommended next actions:",
+      "answer_risks": "Risk alerts:",
+      "answer_decision": "Recommended decision:",
+      "answer_highlights": "Highlights:",
+      "no_data": "No live data available yet.",
+      "error": "I could not reach the AI endpoint. Try again after refreshing or restarting the backend.",
+      "public_login": "Sign in to unlock personal AI help for requests, reviews, reports, and dashboard insights.",
+      "public_register": "Use Register to submit your institution details. After approval, you can create evaluation requests and track them.",
+      "status_help": "Typical flow: Draft, Pending review, Under evaluation, Admin review, Field review, then Completed or Rejected.",
+      "feature_help": "I can summarize requests, suggest reviewer notes, detect risks, explain dashboard insights, and guide you to the right page.",
+      "general_help": "Tell me what you are trying to do. I can guide you to profile, requests, evaluations, admin reports, or explain the workflow.",
+      "example_one": "Check my next step",
+      "example_two": "Explain this workflow",
+      "example_three": "What can you help with?",
+      "reply_greeting": "Hey. I am here with you. Tell me what page you are working on or what you want to finish, and I will guide you step by step.",
+      "reply_thanks": "Anytime. I can stay with the workflow: requests, reports, review notes, or dashboard risks.",
+      "profile_help": "You are on the profile page. I can help you understand language, timezone, avatar, account info, and security settings.",
+      "dashboard_help": "You are on the dashboard. I can explain what the cards mean, where to go next, or what needs attention.",
+      "nav_profile": "Open profile",
+      "nav_requests": "Open requests",
+      "nav_reports": "Open reports",
+      "nav_profile_answer": "Use Profile to edit your personal information, avatar, language, timezone, and notification preferences.",
+      "nav_requests_answer": "Use My Requests to create a new evaluation request, track status, and open final reports.",
+      "nav_reports_answer": "Use Admin Reports to see analytics, exports, and AI dashboard insights. This is available for platform admins.",
+      "nav_general_answer": "Tell me the destination: profile, requests, evaluation inbox, admin panel, or reports. I will point you to the right place.",
+      "page_actions": "Useful actions:",
+      "prompt_current_page": "Explain this page",
+      "prompt_reports_page": "Explain reports",
+      "prompt_catalog_page": "Explain catalog",
+      "prompt_requests_page": "Explain requests",
+      "prompt_profile_page": "Explain profile",
+      "pages": {
+        "home": {
+          "title": "Home page",
+          "summary": "Public entry point with the platform offer, quick access cards, system components, and the Top 10 institutions leaderboard from live evaluation data.",
+          "actions": "- Start registration\n- Open login\n- Explore evaluation flow\n- Check the leaderboard"
+        },
+        "dashboard": {
+          "title": "Dashboard",
+          "summary": "Personal workspace that changes by role: institution managers see request progress, admins see platform operations, and reviewers see assigned evaluation work.",
+          "actions": "- Check live updates\n- Open quick actions\n- Continue pending work\n- Review status cards"
+        },
+        "profile": {
+          "title": "Profile page",
+          "summary": "Personal account area for identity, avatar, phone, organization, bio, language, timezone, density, notifications, and security information.",
+          "actions": "- Update personal identity\n- Upload or remove avatar\n- Change language and timezone\n- Save personalization settings"
+        },
+        "register": {
+          "title": "Institution registration",
+          "summary": "Public form where a new institution submits manager, location, contact, and description data for admin review.",
+          "actions": "- Fill institution information\n- Submit registration\n- Wait for admin approval and email notification"
+        },
+        "requests": {
+          "title": "My Requests",
+          "summary": "Institution request list for tracking drafts, submitted evaluations, workflow status, categories, answers, files, and final reports.",
+          "actions": "- Create a new request\n- Filter by status\n- Open request details\n- Download final report when completed"
+        },
+        "new_request": {
+          "title": "New evaluation request",
+          "summary": "Dynamic request builder using catalog categories, questions, A/B/C/D answers, notes, and mandatory documents from the database.",
+          "actions": "- Select categories\n- Answer all questions\n- Attach required documents\n- Save draft or submit request"
+        },
+        "request_detail": {
+          "title": "Request detail",
+          "summary": "Detailed view of one evaluation request with answers, attachments, workflow decisions, final score, AI report generator, and report download.",
+          "actions": "- Review answers and files\n- Read AI summary\n- Track decisions\n- Download PDF report when ready"
+        },
+        "evaluation": {
+          "title": "Evaluation inbox",
+          "summary": "Reviewer workspace listing assigned requests with filters, status, institution, answer counts, and direct access to review pages.",
+          "actions": "- Filter assigned requests\n- Open a review\n- Check request status\n- Continue pending evaluations"
+        },
+        "review": {
+          "title": "Review request",
+          "summary": "Evaluation page for checking answers and attachments, editing ratings, writing notes, using AI assistance, and submitting workflow decisions.",
+          "actions": "- Review category answers\n- Apply suggested ratings\n- Add decision notes\n- Approve, reject, or request info"
+        },
+        "admin_dashboard": {
+          "title": "Admin dashboard",
+          "summary": "Admin overview focused on registration requests and platform action cards, with pending, approved, and rejected registration counts.",
+          "actions": "- Review pending registrations\n- Open all registration requests\n- Approve or reject institutions\n- Monitor platform queue"
+        },
+        "registrations": {
+          "title": "Registration requests",
+          "summary": "Admin review board for institution registrations with pending, approved, and rejected tabs plus approval and rejection notes.",
+          "actions": "- Inspect submitted institution data\n- Approve valid requests\n- Reject with a reason\n- Track totals by status"
+        },
+        "users": {
+          "title": "User management",
+          "summary": "Admin page for searching users, filtering by role, creating accounts, and activating or deactivating platform users.",
+          "actions": "- Search accounts\n- Filter by role\n- Add users\n- Deactivate or reactivate users"
+        },
+        "categories": {
+          "title": "Evaluation categories",
+          "summary": "Catalog resource page for managing bilingual evaluation categories, descriptions, order, status, and required documents.",
+          "actions": "- Add or edit categories\n- Manage required documents\n- Reorder categories\n- Activate or deactivate resources"
+        },
+        "questions": {
+          "title": "Questions",
+          "summary": "Catalog question page for binding bilingual questions to categories, controlling attachment requirements, ordering, and activation.",
+          "actions": "- Add questions\n- Link questions to categories\n- Mark attachment requirements\n- Activate or deactivate questions"
+        },
+        "values": {
+          "title": "Values and scores",
+          "summary": "Admin scoring page for the A/B/C/D evaluation scale, bilingual labels, numeric scores, order, and active status.",
+          "actions": "- Tune score values\n- Edit labels\n- Reorder values\n- Keep inactive values for history"
+        },
+        "assignments": {
+          "title": "Request distribution",
+          "summary": "Admin assignment page for sending requests to evaluation team members across initial, admin review, and field review stages.",
+          "actions": "- Pick a request\n- Select stage\n- Choose reviewer\n- Assign manually or use workflow mode"
+        },
+        "audit": {
+          "title": "Audit log",
+          "summary": "Trace page for sensitive operations, users, entities, results, and AOP audit logging across the platform.",
+          "actions": "- Filter audit rows\n- Check action results\n- Trace who changed what\n- Investigate failed operations"
+        },
+        "reports": {
+          "title": "Advanced reports",
+          "summary": "Live analytics page built from registrations, users, catalog resources, value scales, evaluation statuses, scores, AI insights, and PDF/Excel exports.",
+          "actions": "- Refresh live analytics\n- Read AI dashboard insights\n- Check catalog coverage\n- Export PDF or Excel reports"
+        }
+      },
+      "answer_fraud_risks": "Fraud / risk signals:"
+    }
   }
 }
